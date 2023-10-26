@@ -1,6 +1,25 @@
 <template>
-  <v-btn @click="dodajSzkołę()" size="x-large" class="mt-4" style="left: 50%; transform: translateX(-50%)">Dodaj
-    Szkołę</v-btn>
+  <v-dialog height="450" width="500">
+  <template v-slot:activator="{ props }">
+    <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Szkołę"  style="left: 50%; transform: translateX(-50%)"> </v-btn>
+  </template>
+  <template v-slot:default="{ isActive }">
+    <v-card title="Wpisz nazwę szkoły" >
+      <v-card-text >
+        <v-text-field v-model="schoolName"></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+        size="large"
+        class="ma-3 ml-4 mb-10"
+          text="Dodaj"
+          @click="isActive.value = false, dodajSzkołę(index)"
+        ></v-btn>
+      </v-card-actions>
+    </v-card>
+  </template>
+</v-dialog>
   <v-table class="mx-4">
     <thead>
       <tr>
@@ -18,7 +37,7 @@
         <td @click="goToSchoolPage()">{{ item.id }}</td>
         <td>
           <RouterLink :to="{ name: 'JobDetails', params: { id: item.nazwa } }">
-            <h2>{{ item.nazwa }}</h2>
+            <h2><div class="links">{{ item.nazwa }}</div></h2>
           </RouterLink>
         </td>
       </tr>
@@ -67,8 +86,9 @@ export default {
       this.numerSzkoly += 1
       this.szkoły.push({
         id: this.numerSzkoly,
-        nazwa: 'kolejna szkoła'
+        nazwa: this.schoolName
         })
+      this.schoolName = ''
     }
   }
 }
@@ -77,8 +97,7 @@ export default {
 </script>
 
 <style>
-.linki {
-  font-weight: bold;
-  text-decoration: none;
+.links{
+  color: black;
 }
 </style>

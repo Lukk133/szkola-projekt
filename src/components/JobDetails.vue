@@ -1,15 +1,195 @@
 <template>
-  <h1>Strona szkoły</h1>
-  <p> Nazwa szkoły to  {{ $route.params.id }}</p>
+  <v-dialog height="450" width="500">
+  <template v-slot:activator="{ props }">
+    <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Ucznia"  style="left: 25%; transform: translateX(-25%)"> </v-btn>
+  </template>
+  <template v-slot:default="{ isActive }">
+    <v-card title="Wpisz nazwę szkoły" >
+      <v-card-text >
+        <v-text-field v-model="schoolName"></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+        size="large"
+        class="ma-3 ml-4 mb-10"
+          text="Dodaj"
+          @click="isActive.value = false, dodajSzkołę(index)"
+        ></v-btn>
+      </v-card-actions>
+    </v-card>
+  </template>
+</v-dialog>
+<v-dialog height="450" width="500">
+  <template v-slot:activator="{ props }">
+    <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Instruktora"  style="left: 60%; transform: translateX(-60%)"> </v-btn>
+  </template>
+  <template v-slot:default="{ isActive }">
+    <v-card title="Wpisz nazwę szkoły" >
+      <v-card-text >
+        <v-text-field v-model="schoolName"></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+        size="large"
+        class="ma-3 ml-4 mb-10"
+          text="Dodaj"
+          @click="isActive.value = false, dodajSzkołę(index)"
+        ></v-btn>
+      </v-card-actions>
+    </v-card>
+  </template>
+</v-dialog>
+
+  <v-container>
+    <v-row no-gutters>
+      <v-col>
+        <v-sheet class="pa-2 ma-2">
+        <div>
+<v-table class="mx-4">
+    <thead>
+      <tr>
+        <th class="text-left">
+          #
+        </th>
+        <th class="text-left">
+          Imię i nazwisko ucznia
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in szkoły" :key="item.name">
+
+        <td @click="goToSchoolPage()">{{ item.id }}</td>
+        <td>
+          <RouterLink :to="{ name: 'JobDetails', params: { id: item.nazwa } }">
+            <h2><div class="links">{{ item.nazwa }}</div></h2>
+          </RouterLink>
+        </td>
+      </tr>
+    </tbody>
+  </v-table> </div>
+        </v-sheet>
+      </v-col>
+      <v-col>
+        <v-sheet class="pa-2 ma-2">
+          <div>
+            <v-table class="mx-4">
+    <thead>
+      <tr>
+        <th class="text-left">
+          #
+        </th>
+        <th class="text-left">
+          Imię i nazwisko instruktora
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in szkoły" :key="item.name">
+
+        <td @click="goToSchoolPage()">{{ item.id }}</td>
+        <td>
+          <RouterLink :to="{ name: 'JobDetails', params: { id: item.nazwa } }">
+            <h2><div class="links">{{ item.nazwa }}</div></h2>
+          </RouterLink>
+        </td>
+      </tr>
+    </tbody>
+    
+
+    
+
+  </v-table> 
+          </div>
+        </v-sheet>
+      </v-col>
+      <v-responsive width="100%"></v-responsive>
+    </v-row>
+  </v-container>
 </template>
+
 
 <script>
 export default {
   props: ['id'],
- /* data() { kazdy parametr teraz ma props: id (props: true)
-    return {
-      id: this.$route.params.id
-    }
-  }*/
-}
+  }
+
 </script>
+
+<!-- <h1 class="text-center">Strona szkoły {{ $route.params.id }}</h1>
+  
+
+  <v-dialog height="450" width="500">
+  <template v-slot:activator="{ props }">
+    <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Ucznia"  style="left: 25%; transform: translateX(-25%)"> </v-btn>
+  </template>
+  <template v-slot:default="{ isActive }">
+    <v-card title="Wpisz nazwę szkoły" >
+      <v-card-text >
+        <v-text-field v-model="schoolName"></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+        size="large"
+        class="ma-3 ml-4 mb-10"
+          text="Dodaj"
+          @click="isActive.value = false, dodajSzkołę(index)"
+        ></v-btn>
+      </v-card-actions>
+    </v-card>
+  </template>
+</v-dialog>
+
+<v-dialog height="450" width="500">
+  <template v-slot:activator="{ props }">
+    <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Instruktora"  style="left: 60%; transform: translateX(-60%)"> </v-btn>
+  </template>
+  <template v-slot:default="{ isActive }">
+    <v-card title="Wpisz nazwę szkoły" >
+      <v-card-text >
+        <v-text-field v-model="schoolName"></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+        size="large"
+        class="ma-3 ml-4 mb-10"
+          text="Dodaj"
+          @click="isActive.value = false, dodajSzkołę(index)"
+        ></v-btn>
+      </v-card-actions>
+    </v-card>
+  </template>
+</v-dialog>
+
+<v-table class="mx-4">
+    <thead>
+      <tr>
+        <th class="text-left">
+          #
+        </th>
+        <th class="text-left">
+          Nazwa szkoły
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="item in szkoły" :key="item.name">
+
+        <td @click="goToSchoolPage()">{{ item.id }}</td>
+        <td>
+          <RouterLink :to="{ name: 'JobDetails', params: { id: item.nazwa } }">
+            <h2><div class="links">{{ item.nazwa }}</div></h2>
+          </RouterLink>
+        </td>
+      </tr>
+    </tbody>
+    
+
+    
+
+  </v-table> 
+-->

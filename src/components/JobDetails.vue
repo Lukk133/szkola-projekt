@@ -1,4 +1,5 @@
 <template>
+  <h1 class="text-center">Strona szkoły {{ $route.params.id }}</h1>
   <v-dialog height="450" width="500">
   <template v-slot:activator="{ props }">
     <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Ucznia"  style="left: 25%; transform: translateX(-25%)"> </v-btn>
@@ -6,7 +7,7 @@
   <template v-slot:default="{ isActive }">
     <v-card title="Wpisz nazwę szkoły" >
       <v-card-text >
-        <v-text-field v-model="schoolName"></v-text-field>
+        <v-text-field v-model="imieUcznia"></v-text-field>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -14,7 +15,7 @@
         size="large"
         class="ma-3 ml-4 mb-10"
           text="Dodaj"
-          @click="isActive.value = false, dodajSzkołę(index)"
+          @click="isActive.value = false,  dodajUcznia(index)"
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -27,7 +28,7 @@
   <template v-slot:default="{ isActive }">
     <v-card title="Wpisz nazwę szkoły" >
       <v-card-text >
-        <v-text-field v-model="schoolName"></v-text-field>
+        <v-text-field v-model="imieInstruktora"></v-text-field>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -35,7 +36,7 @@
         size="large"
         class="ma-3 ml-4 mb-10"
           text="Dodaj"
-          @click="isActive.value = false, dodajSzkołę(index)"
+          @click="isActive.value = false, dodajInstruktora(index)"
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -59,13 +60,12 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="item in szkoły" :key="item.name">
+      <tr v-for="uczen in uczniowie" :key="uczen.name">
 
-        <td @click="goToSchoolPage()">{{ item.id }}</td>
+        <td>{{ uczen.id}}</td>
         <td>
-          <RouterLink :to="{ name: 'JobDetails', params: { id: item.nazwa } }">
-            <h2><div class="links">{{ item.nazwa }}</div></h2>
-          </RouterLink>
+          <h3 ><div class="links">{{ uczen.name }}</div></h3>
+         
         </td>
       </tr>
     </tbody>
@@ -87,20 +87,14 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="item in szkoły" :key="item.name">
+      <tr v-for="instruktor in instruktorzy" :key="instruktor.name">
 
-        <td @click="goToSchoolPage()">{{ item.id }}</td>
+        <td>{{ instruktor.id}}</td>
         <td>
-          <RouterLink :to="{ name: 'JobDetails', params: { id: item.nazwa } }">
-            <h2><div class="links">{{ item.nazwa }}</div></h2>
-          </RouterLink>
+         <h3 ><div class="links">{{ instruktor.name }}</div></h3>
         </td>
       </tr>
     </tbody>
-    
-
-    
-
   </v-table> 
           </div>
         </v-sheet>
@@ -113,8 +107,43 @@
 
 <script>
 export default {
+  data(){
+    return{
+      numerUcznia: 0,
+      numerInstruktora: 0,
+      imieUcznia: '',
+      uczniowie:[{
+   
+      }],
+      instruktorzy:[{
+
+      }]
+
+    }
+  },
   props: ['id'],
+  methods: {
+    dodajUcznia(){
+      if(this.imieUcznia.length === 0) return;
+      this.numerUcznia += 1
+      this.uczniowie.push({
+        id: this.numerUcznia,
+        name: this.imieUcznia
+        })
+      this.imieUcznia = ''
+    },
+    dodajInstruktora(){
+      if(this.imieInstruktora.length === 0) return;
+      this.numerInstruktora += 1
+      this.instruktorzy.push({
+        id: this.numerInstruktora,
+        name: this.imieInstruktora
+        })
+      this.imieInstruktora = ''
+    
+    }
   }
+}
 
 </script>
 

@@ -15,7 +15,7 @@ const routes = [
     component: StronaSzkół
   },
   {
-    path: '/jobs/:id',
+    path: '/:id',
     name: 'JobDetails',
     component: JobDetails,
     props: true

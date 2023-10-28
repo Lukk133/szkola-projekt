@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ListaSzkół from '../components/ListaSzkół.vue'
-import StronaSzkół from '../components/StronaSzkół.vue'
 import JobDetails from '../components/JobDetails.vue'
 
 const routes = [
@@ -8,11 +7,6 @@ const routes = [
     path: '/',
     name: 'ListaSzkół',
     component: ListaSzkół
-  },
-  {
-    path: '/about',
-    name: 'StronaSzkół',
-    component: StronaSzkół
   },
   {
     path: '/:id',

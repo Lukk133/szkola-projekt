@@ -1,6 +1,5 @@
 <template>
   <nav>
-    <router-link :to="{name: 'StronaSzkół'}">tam nie</router-link><br>
     <router-link :to="{name: 'ListaSzkół'}">Lista szkół</router-link>
   </nav>
   <router-view/>

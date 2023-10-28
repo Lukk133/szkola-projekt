@@ -31,13 +31,15 @@
         </th>
       </tr>
     </thead>
-    <tbody>
-      <tr v-for="item in szkoły" :key="item.name">
+ 
+  <tbody>
+  
+      <tr v-for=" item in szkoły" :key="item.name">
 
-        <td @click="goToSchoolPage()">{{ item.id }}</td>
+        <td>{{ item.id }}</td>
         <td>
-          <RouterLink :to="{ name: 'JobDetails', params: { id: item.nazwa } }">
-            <h2><div class="links">{{ item.nazwa }}</div></h2>
+      <RouterLink  :to="{ name: 'JobDetails', params: { id:item.id } }">
+            <h2><div @click="goToSchoolPage()" class="links">{{ item.nazwa }}</div></h2>
           </RouterLink>
         </td>
       </tr>
@@ -48,50 +50,52 @@
 
 <script>
 export default {
-  data() {
-    return {
+  data(){
+    return{
       numerSzkoly: 5,
-      szkoły: [
-        {
-          id: 1,
-          nazwa: 'XIV LO im. Stanisława Staszica',
-        },
-        {
-          id: 2,
-          nazwa: '	V LO im. Augusta Witkowskiego',
-        },
-        {
-          id: 3,
-          nazwa: 'XIII LO',
-
-        },
-        {
-          id: 4,
-          nazwa: 'Uniwersyteckie LO',
-
-        },
-        {
-          id: 5,
-          nazwa: 'III LO z Oddz. Dwujęz. im. Marynarki Wojennej RP',
-
-        }
-      ]
+        szkoły: [
+          {
+            id: 1,
+            nazwa: 'XIV LO im. Stanisława Staszica',
+          },
+          {
+            id: 2,
+            nazwa: '	V LO im. Augusta Witkowskiego',
+          },
+          {
+            id: 3,
+            nazwa: 'XIII LO',
+    
+          },
+          {
+            id: 4,
+            nazwa: 'Uniwersyteckie LO',
+    
+          },
+          {
+            id: 5,
+            nazwa: 'III LO z Oddz. Dwujęz. im. Marynarki Wojennej RP',
+    
+          }
+        ]
     }
   },
-  methods: {
+  
+  methods:{
     goToSchoolPage() {
-      this.$router.push(`/${this.szkoły.id}`);
-    },
-    dodajSzkołę(){
-      this.numerSzkoly += 1
-      this.szkoły.push({
-        id: this.numerSzkoly,
-        nazwa: this.schoolName
-        })
-      this.schoolName = ''
+        this.$router.push(`/${this.szkoły.id}`);
+      },
+      dodajSzkołę(){
+        this.numerSzkoly += 1
+        this.szkoły.push({
+          id: this.numerSzkoly,
+          nazwa: this.schoolName
+          })
+        this.schoolName = ''
+      }
     }
   }
-}
+
 
 
 </script>

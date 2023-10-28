@@ -38,7 +38,7 @@
 
         <td>{{ item.id }}</td>
         <td>
-      <RouterLink  :to="{ name: 'JobDetails', params: { id:item.id } }">
+      <RouterLink  :to="{ name: 'JobDetails', params: { id:item.nazwa } }">
             <h2><div @click="goToSchoolPage()" class="links">{{ item.nazwa }}</div></h2>
           </RouterLink>
         </td>
@@ -83,7 +83,7 @@ export default {
   
   methods:{
     goToSchoolPage() {
-        this.$router.push(`/${this.szkoły.id}`);
+        this.$router.push(`/${this.szkoły.nazwa}`);
       },
       dodajSzkołę(){
         this.numerSzkoly += 1

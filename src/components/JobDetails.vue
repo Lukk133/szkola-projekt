@@ -1,5 +1,5 @@
 <template>
-  <h1 class="text-center">Strona szkoły</h1>
+  <h1 class="text-center">Strona szkoły {{ $route.params.id }}</h1>
   <v-dialog height="450" width="500">
   <template v-slot:activator="{ props }">
     <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Ucznia"  style="left: 25%; transform: translateX(-25%)"> </v-btn>

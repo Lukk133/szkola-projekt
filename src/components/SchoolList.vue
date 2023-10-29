@@ -35,13 +35,15 @@
   <tbody>
   
       <tr v-for=" school in schools" :key="school.name">
-
         <td>{{ school.id }}</td>
         <td>
       <RouterLink  :to="{ name: 'SchoolPage', params: { id:school.name } }">
-            <h2><div @click="goToSchoolPage()" class="links">{{ school.name }}</div></h2>
+            <h2><div type="input" @click="goToSchoolPage()" class="links">{{ school.name }}</div></h2>
+            <!--textArea-->
           </RouterLink>
         </td>
+        <v-icon  @clic="editSchoolName(index)" icon="fa fa-edit pt-2"/>
+        <v-icon @click="deleteSchool(index)" icon="fa fa-trash pl-5 pt-2"/>
       </tr>
     </tbody>
   </v-table>
@@ -90,7 +92,14 @@ export default {
           name: this.schoolName
           })
         this.schoolName = ''
-      }
+      },
+      deleteSchool(index){
+      this.schools.splice(index, 1)
+    },
+    editSchoolName(index){
+      this.schools = this.schoolName[index].name
+      this.editedTask = index
+    },
     }
   }
 

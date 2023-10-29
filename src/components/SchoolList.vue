@@ -14,7 +14,7 @@
         size="large"
         class="ma-3 ml-4 mb-10"
           text="Dodaj"
-          @click="isActive.value = false, dodajSzkołę(index)"
+          @click="isActive.value = false, addSchool(index)"
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -34,17 +34,16 @@
  
   <tbody>
   
-      <tr v-for=" item in szkoły" :key="item.name">
+      <tr v-for=" school in schools" :key="school.name">
 
-        <td>{{ item.id }}</td>
+        <td>{{ school.id }}</td>
         <td>
-      <RouterLink  :to="{ name: 'JobDetails', params: { id:item.nazwa } }">
-            <h2><div @click="goToSchoolPage()" class="links">{{ item.nazwa }}</div></h2>
+      <RouterLink  :to="{ name: 'SchoolPage', params: { id:school.name } }">
+            <h2><div @click="goToSchoolPage()" class="links">{{ school.name }}</div></h2>
           </RouterLink>
         </td>
       </tr>
     </tbody>
-
   </v-table>
 </template>
 
@@ -52,30 +51,29 @@
 export default {
   data(){
     return{
-      numerSzkoly: 5,
-        szkoły: [
+      schoolNumber: 5,
+      schools: [
           {
             id: 1,
-            nazwa: 'XIV LO im. Stanisława Staszica',
+            name: 'XIV LO im. Stanisława Staszica',
           },
           {
             id: 2,
-            nazwa: '	V LO im. Augusta Witkowskiego',
+            name: '	V LO im. Augusta Witkowskiego',
           },
           {
             id: 3,
-            nazwa: 'XIII LO',
+            name: 'XIII LO',
     
           },
           {
             id: 4,
-            nazwa: 'Uniwersyteckie LO',
+            name: 'Uniwersyteckie LO',
     
           },
           {
             id: 5,
-            nazwa: 'III LO z Oddz. Dwujęz. im. Marynarki Wojennej RP',
-    
+            name: 'III LO z Oddz. Dwujęz. im. Marynarki Wojennej RP',
           }
         ]
     }
@@ -83,13 +81,13 @@ export default {
   
   methods:{
     goToSchoolPage() {
-        this.$router.push(`/${this.szkoły.nazwa}`);
+        this.$router.push(`/${this.schools.name}`);
       },
-      dodajSzkołę(){
-        this.numerSzkoly += 1
-        this.szkoły.push({
-          id: this.numerSzkoly,
-          nazwa: this.schoolName
+      addSchool(){
+        this.schoolNumber += 1
+        this.schools.push({
+          id: this.schoolNumber,
+          name: this.schoolName
           })
         this.schoolName = ''
       }

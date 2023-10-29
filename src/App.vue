@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <router-link :to="{name: 'ListaSzkół'}">Lista szkół</router-link>
+    <router-link :to="{name: 'SchoolList'}">Lista szkół</router-link>
   </nav>
   <router-view/>
 </template>
@@ -14,5 +14,4 @@ export default {
     //
   }),
 }
-</script><!-- <router-link to="/">Home</router-link> |
-  <router-link to="/about">About</router-link>-->
+</script>

@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ListaSzkół from '../components/ListaSzkół.vue'
-import JobDetails from '../components/JobDetails.vue'
+import SchoolList from '../components/SchoolList.vue'
+import SchoolPage from '../components/SchoolPage.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'ListaSzkół',
-    component: ListaSzkół
+    name: 'SchoolList',
+    component: SchoolList
   },
   {
     path: '/:id',
-    name: 'JobDetails',
-    component: JobDetails,
+    name: 'SchoolPage',
+    component: SchoolPage,
     props: true
   },
 ]

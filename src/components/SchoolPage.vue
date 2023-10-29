@@ -5,9 +5,9 @@
     <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Ucznia"  style="left: 25%; transform: translateX(-25%)"> </v-btn>
   </template>
   <template v-slot:default="{ isActive }">
-    <v-card title="Wpisz nazwę szkoły" >
+    <v-card title="Wpisz imię i nazwisko ucznia" >
       <v-card-text >
-        <v-text-field v-model="imieUcznia"></v-text-field>
+        <v-text-field v-model="studentName"></v-text-field>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -15,7 +15,7 @@
         size="large"
         class="ma-3 ml-4 mb-10"
           text="Dodaj"
-          @click="isActive.value = false,  dodajUcznia(index)"
+          @click="isActive.value = false,  addStudent(index)"
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -26,9 +26,9 @@
     <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Instruktora"  style="left: 60%; transform: translateX(-60%)"> </v-btn>
   </template>
   <template v-slot:default="{ isActive }">
-    <v-card title="Wpisz nazwę szkoły" >
+    <v-card title="Wpisz imię i nazwisko instruktora" >
       <v-card-text >
-        <v-text-field v-model="imieInstruktora"></v-text-field>
+        <v-text-field v-model="teacherName"></v-text-field>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -36,7 +36,7 @@
         size="large"
         class="ma-3 ml-4 mb-10"
           text="Dodaj"
-          @click="isActive.value = false, dodajInstruktora(index)"
+          @click="isActive.value = false, addTeacher(index)"
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -60,11 +60,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="uczen in uczniowie" :key="uczen.name">
+      <tr v-for="student in students" :key="student.name">
 
-        <td>{{ uczen.id}}</td>
+        <td>{{ student.id}}</td>
         <td>
-          <h3 ><div class="links">{{ uczen.name }}</div></h3>
+          <h3 ><div class="links">{{ student.name }}</div></h3>
          
         </td>
       </tr>
@@ -87,11 +87,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="instruktor in instruktorzy" :key="instruktor.name">
+      <tr v-for="teacher in teachers" :key="teacher.name">
 
-        <td>{{ instruktor.id}}</td>
+        <td>{{ teacher.id}}</td>
         <td>
-         <h3 ><div class="links">{{ instruktor.name }}</div></h3>
+         <h3 ><div class="links">{{ teacher.name }}</div></h3>
         </td>
       </tr>
     </tbody>
@@ -109,41 +109,44 @@
 export default {
   data(){
     return{
-      numerUcznia: 0,
-      numerInstruktora: 0,
-      imieUcznia: '',
-      imieInstruktora: '',
-      uczniowie:[{
-   
-      }],
-      instruktorzy:[{
-
-      }]
-
+      studentNumber: 0,
+      teacherNumber: 0,
+      studentName: '',
+      teacherName: '',
+      students:[
+      ],
+      teachers:[
+      ]
     }
   },
   props: ['id'],
   methods: {
-    dodajUcznia(){
-      if(this.imieUcznia.length === 0) return;
-      this.numerUcznia += 1
-      this.uczniowie.push({
-        id: this.numerUcznia,
-        name: this.imieUcznia
+    addStudent(){
+      if(this.studentName.length === 0) return;
+      this.studentNumber += 1
+      this.students.push({
+        id: this.studentNumber,
+        name: this.studentName
         })
-      this.imieUcznia = ''
+      this.studentName = ''
     },
-    dodajInstruktora(){
-      if(this.imieInstruktora.length === 0) return;
-      this.numerInstruktora += 1
-      this.instruktorzy.push({
-        id: this.numerInstruktora,
-        name: this.imieInstruktora
+    addTeacher(){
+      if(this.teacherName.length === 0) return;
+      this.teacherNumber += 1
+      this.teachers.push({
+        id: this.teacherNumber,
+        name: this.teacherName
         })
-      this.imieInstruktora = ''
+      this.teacherName = ''
     
     }
   }
 }
 
 </script>
+
+<style>
+a {
+  text-decoration:none;
+}
+</style>

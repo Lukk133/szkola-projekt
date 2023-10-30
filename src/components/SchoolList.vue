@@ -34,7 +34,7 @@
  
   <tbody>
   
-      <tr v-for=" (school, index) in schools" :key="school.name">
+      <tr v-for="(school, index) in schools" :key="school.name">
         <td>{{ school.id }}</td>
         <td>
       <RouterLink  :to="{ name: 'SchoolPage', params: { id:school.name } }">
@@ -122,6 +122,7 @@ export default {
         this.editedTask = null
         }
         this.schoolName = ''
+        
       },
       deleteSchool(index){
       this.schools.splice(index, 1)

@@ -81,22 +81,21 @@ export default {
         this.$router.push(`/${this.schools.name}`);
       },
       addSchool(schoolName, editedTask){
+//  let maxNumber = (Math.max(this.schoolNumber += 1))
         if(!editedTask){
-          this.schoolNumber += 1
         this.schools.push({
-          id: this.schoolNumber,
+          id: this.schoolNumber += 1,
           name: schoolName
           }) 
         } else {
-          this.schools[this.schoolNumber].name = schoolName
+          this.schools[this.indexSchoolNumber].name = schoolName
         }
-        
       },
       deleteSchool(index){
       this.schools.splice(index, 1)
     },
     setSchoolNumber(index){
-      this.schoolNumber = index
+      this.indexSchoolNumber = index
     },
     clearEdit(){   
         this.schoolName = ''

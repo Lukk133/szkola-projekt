@@ -1,47 +1,9 @@
 <template>
   <h1 class="text-center">Strona szkoły {{ $route.params.id }}</h1>
-  <v-dialog height="450" width="500">
-  <template v-slot:activator="{ props }">
-    <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Ucznia"  style="left: 25%; transform: translateX(-25%)"> </v-btn>
-  </template>
-  <template v-slot:default="{ isActive }">
-    <v-card title="Wpisz imię i nazwisko ucznia" >
-      <v-card-text >
-        <v-text-field v-model="studentName"></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-        size="large"
-        class="ma-3 ml-4 mb-10"
-          text="Dodaj"
-          @click="isActive.value = false,  addStudent(index)"
-        ></v-btn>
-      </v-card-actions>
-    </v-card>
-  </template>
-</v-dialog>
-<v-dialog height="450" width="500">
-  <template v-slot:activator="{ props }">
-    <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Instruktora"  style="left: 60%; transform: translateX(-60%)"> </v-btn>
-  </template>
-  <template v-slot:default="{ isActive }">
-    <v-card title="Wpisz imię i nazwisko instruktora" >
-      <v-card-text >
-        <v-text-field v-model="teacherName"></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-        size="large"
-        class="ma-3 ml-4 mb-10"
-          text="Dodaj"
-          @click="isActive.value = false, addTeacher(index)"
-        ></v-btn>
-      </v-card-actions>
-    </v-card>
-  </template>
-</v-dialog>
+
+ <AddStudentDialog @addStudent="addStudent"/>
+
+ <AddTeacherDialog @addTeacher="addTeacher"/>
 
   <v-container>
     <v-row no-gutters>
@@ -65,29 +27,10 @@
         <td>{{ student.id}}</td>
         <td>
           <h3 ><div class="links">{{ student.name }}</div></h3>
-         
         </td>
-        <v-dialog @click:outside="closeDialog, clearEdit()" height="450" width="500">
-  <template v-slot:activator="{ props }">
-    <v-icon  v-bind="props" @click="editStudentName(index)" icon="fa fa-edit pr-5 mt-2"/>
-  </template>
-  <template v-slot:default="{ isActive }">
-    <v-card title="Edytuj dane ucznia" >
-      <v-card-text >
-        <v-text-field v-model="studentName"></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-        size="large"
-        class="ma-3 ml-4 mb-10"
-          text="Edytuj"
-          @click="isActive.value = false, addStudent(index)"
-        ></v-btn>
-      </v-card-actions>
-    </v-card>
-  </template>
-</v-dialog>
+
+      <EditStudentDialog @EditStudent = "addStudent" @OpenedDialog = "setStudentNumber(index)" :deafualtStudentName="student.name"/>
+
         <v-icon @click="deleteStudent(index)" icon="fa fa-trash pl-5 mt-2"/>
       </tr>
     </tbody>
@@ -115,27 +58,9 @@
         <td>
          <h3 ><div class="links">{{ teacher.name }}</div></h3>
         </td>
-        <v-dialog @click:outside="closeDialog, clearEdit()" height="450" width="500">
-  <template v-slot:activator="{ props }">
-    <v-icon  v-bind="props" @click="editTeacherName(index)" icon="fa fa-edit pr-5 mt-2"/>
-  </template>
-  <template v-slot:default="{ isActive }">
-    <v-card title="Edytuj dane instruktora" >
-      <v-card-text >
-        <v-text-field v-model="teacherName"></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-        size="large"
-        class="ma-3 ml-4 mb-10"
-          text="Edytuj"
-          @click="isActive.value = false, addTeacher(index)"
-        ></v-btn>
-      </v-card-actions>
-    </v-card>
-  </template>
-</v-dialog>
+       
+        <EditTeacherDialog @EditTeacher = "addTeacher" @OpenedDialog = "setTeacherNumber(index)" :deafualtTeacherName="teacher.name"/>
+
         <v-icon @click="deleteTeacher(index)" icon="fa fa-trash pl-5 mt-2"/>
       </tr>
     </tbody>
@@ -150,7 +75,18 @@
 
 
 <script>
+import AddStudentDialog from "../assets/AddStudent.vue"
+import EditStudentDialog from "../assets/EditStudentDialog.vue"
+import AddTeacherDialog from "../assets/AddTeacherDialog.vue"
+import EditTeacherDialog from "../assets/EditTeacherDialog.vue"
+
 export default {
+  components:{
+    AddStudentDialog,
+    EditStudentDialog,
+    AddTeacherDialog,
+    EditTeacherDialog
+  },
   data(){
     return{
       studentNumber: 0,
@@ -167,55 +103,45 @@ export default {
   },
   props: ['id'],
   methods: {
-    addStudent(){
-      if(this.studentName.length === 0) return;
-      if(this.editedTask1 === null){
-        this.studentNumber += 1
-      this.students.push({
-        id: this.studentNumber,
-        name: this.studentName
-        })
-      } else {
-        this.students[this.editedTask1].name = this.studentName
-        this.editedTask1 = null
-      }
-      this.studentName = ''
-    },
+    addStudent(studentName, editedTask1){
+        if(!editedTask1){
+          this.studentNumber += 1
+        this.students.push({
+          id: this.studentNumber,
+          name: studentName
+          }) 
+        } else {
+          this.students[this.indexStudentNumber].name = studentName
+        }
+      },
     deleteStudent(index){
       this.students.splice(index, 1)
     },
-    editStudentName(index){
-      this.studentName = this.students[index].name
-      this.editedTask1 = index
+    setStudentNumber(index){
+      this.indexStudentNumber = index
     },
     clearEdit(){   
-        this.studentName = '',
-        this.editedTask1 = null
+        this.studentName = ''
     },
-    addTeacher(){
-      if(this.teacherName.length === 0) return;
-      if(this.editedTask2 === null){
-        this.teacherNumber += 1
-      this.teachers.push({
-        id: this.teacherNumber,
-        name: this.teacherName
-        })
-      } else {
-        this.teachers[this.editedTask2].name = this.teacherName
-        this.editedTask2 = null
-      }
-      this.teacherName = ''
-    },
+    addTeacher(teacherName, editedTask2){
+        if(!editedTask2){
+          this.teacherNumber += 1
+        this.teachers.push({
+          id: this.teacherNumber,
+          name: teacherName
+          }) 
+        } else {
+          this.teachers[this.indexTeacherNumber].name = teacherName
+        }
+      },
     deleteTeacher(index){
       this.teachers.splice(index, 1)
     },
-    editTeacherName(index){
-      this.teacherName = this.teachers[index].name
-      this.editedTask2 = index
+    setTeacherNumber(index){
+      this.indexTeacherNumber = index
     },
     clearEdit(){   
-        this.teacherName = '',
-        this.editedTask2 = null
+        this.teacherName = ''
     },
     } 
   }

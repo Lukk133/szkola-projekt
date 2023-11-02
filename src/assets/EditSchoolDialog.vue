@@ -32,7 +32,6 @@
     },
     methods:{
       editSchool(){
-      console.log('halo');
       this.$emit('EditSchool', this.schoolName, true)
     },
     clearEdit(){   
@@ -43,7 +42,7 @@
      this.$emit('OpenedDialog')
     },
     setSchoolNumber(index){
-      this.schoolNumber = index
+      this.indexSchoolNumber = index
     },
   }
 }

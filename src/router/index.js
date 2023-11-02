@@ -1,12 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import SchoolList from '../components/SchoolList.vue'
 import SchoolPage from '../components/SchoolPage.vue'
+import LoginPage from '../components/LoginPage.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/SchoolList',
     name: 'SchoolList',
     component: SchoolList
+  },
+  {
+    path: '/',
+    name: 'LoginPage',
+    component: LoginPage
   },
   {
     path: '/:id',

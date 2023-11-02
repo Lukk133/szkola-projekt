@@ -1,5 +1,6 @@
 <template>
     <DialogSchool @addSchool = "addSchool"/>
+    
    
   <v-table class="mx-4">
     <thead>
@@ -37,6 +38,7 @@
 import DialogSchool from "../assets/AddSchoolDialog.vue"
 import EditSchool from "../assets/EditSchoolDialog.vue"
 
+
 export default {
   components:{
     DialogSchool,
@@ -45,6 +47,7 @@ export default {
   name: 'HelloWorld',
   data(){
     return{
+      
       schoolName: '',
       schoolNumber: 5,
       editedTask: null,
@@ -81,7 +84,7 @@ export default {
         this.$router.push(`/${this.schools.name}`);
       },
       addSchool(schoolName, editedTask){
-//  let maxNumber = (Math.max(this.schoolNumber += 1))
+ //  let maxNumber = (Math.max(this.schoolNumber += 1))
         if(!editedTask){
         this.schools.push({
           id: this.schoolNumber += 1,

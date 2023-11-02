@@ -1,0 +1,46 @@
+<template>
+<v-dialog height="450" width="500">
+  <template v-slot:activator="{ props }">
+    <v-btn class="mt-4" size="x-large" v-bind="props" text="Dodaj Szkołę"  style="left: 50%; transform: translateX(-50%)" @click="schoolNameReset">
+    </v-btn>
+  </template>
+  <template v-slot:default="{ isActive }">
+    <v-card title="Wpisz nazwę szkoły" >
+      <v-card-text >
+        <v-text-field v-model="schoolName"></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+        size="large"
+        class="ma-3 ml-4 mb-10"
+          text="Dodaj"
+          @click="isActive.value = false, addSchool()"
+        ></v-btn>
+      </v-card-actions>
+    </v-card>
+  </template>
+</v-dialog>
+ </template>
+ 
+ <script>
+export default{
+  data(){
+    return{
+      schoolName: '',
+      schoolNumber: 5
+    }
+  },
+  methods:{
+    addSchool(){
+      this.$emit('addSchool', this.schoolName, false)
+
+    },
+    schoolNameReset(){
+      this.schoolName = ''
+    }
+    
+  }
+}
+
+ </script>

@@ -26,9 +26,9 @@
         density="compact"
         placeholder="Hasło"
         variant="outlined"
-        @click:append-inner="visible = !visible"
+        @click:append-inner="visible = !$store.state.visible"
       ></v-text-field>
-      <div :hidden="!showAlert" class="ml-7" style="color:red" >Login i hasło musi mieć od 5 do 50 znaków</div>
+      <div :hidden="!$store.state.showAlert" class="ml-7" style="color:red" >Login i hasło musi mieć od 5 do 50 znaków</div>
       <v-btn
         block
         class="mb-8"
@@ -55,14 +55,12 @@
       return{
         userLogin: '',
         userPassword: '',
-        visible: false,
-        showAlert: false
       }
     },
     methods:{
       login(){
         if(this.userLogin.length <=5 || this.userPassword.length <=5
-        || this.userLogin.length >=50 || this.userPassword.length >=50){this.showAlert = true} 
+        || this.userLogin.length >=50 || this.userPassword.length >=50){this.$store.state.showAlert = true} 
         else{
           this.$router.push(`/SchoolList`);
           
@@ -80,3 +78,5 @@
   top: 10em;
 }
 </style>
+
+

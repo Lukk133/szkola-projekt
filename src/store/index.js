@@ -4,6 +4,7 @@ export default createStore({
       state: {
         showAlert: false,
         visible: false,
+        isLogged: false
   },
   getters: {
   },

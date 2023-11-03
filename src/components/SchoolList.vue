@@ -103,8 +103,14 @@ export default {
     clearEdit(){   
         this.schoolName = ''
     }
-    }
+    },
+    beforeCreate () {
+  if (this.$store.state.isLogged === false) {
+    this.$router.push('/')
   }
+}
+  }
+  
 
 
 

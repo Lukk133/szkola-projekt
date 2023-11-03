@@ -79,6 +79,9 @@ import AddStudentDialog from "../assets/AddStudent.vue"
 import EditStudentDialog from "../assets/EditStudentDialog.vue"
 import AddTeacherDialog from "../assets/AddTeacherDialog.vue"
 import EditTeacherDialog from "../assets/EditTeacherDialog.vue"
+import { onMounted } from "vue"
+
+
 
 export default {
   components:{
@@ -143,8 +146,14 @@ export default {
     clearEdit(){   
         this.teacherName = ''
     },
-    } 
+   
+    } ,
+    beforeCreate () {
+  if (this.$store.state.isLogged === false) {
+    this.$router.push('/')
   }
+  }
+}
 
 </script>
 

@@ -55,6 +55,7 @@
       return{
         userLogin: '',
         userPassword: '',
+        
       }
     },
     methods:{
@@ -62,6 +63,7 @@
         if(this.userLogin.length <=5 || this.userPassword.length <=5
         || this.userLogin.length >=50 || this.userPassword.length >=50){this.$store.state.showAlert = true} 
         else{
+          this.$store.state.isLogged = true
           this.$router.push(`/SchoolList`);
           
 

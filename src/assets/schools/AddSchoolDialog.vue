@@ -25,6 +25,12 @@
  
  <script>
 export default{
+  computed: {
+    cities(){
+      return this.$store.getters.getCities
+    }
+
+  },
   data(){
     return{
       schoolName: '',
@@ -38,6 +44,13 @@ export default{
     },
     schoolNameReset(){
       this.schoolName = ''
+    },
+    open(){
+      this.schoolNameReset()
+      this.listCities()
+    },
+    listCities(){
+      this.$store.dispatch("listCities")
     }
     
   }

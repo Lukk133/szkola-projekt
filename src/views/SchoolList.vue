@@ -15,7 +15,6 @@
     </thead>
  
   <tbody>
-  
       <tr v-for="(school, index) in schools" :key="school.name">
         <td>{{ school.id }}</td>
         <td>
@@ -35,8 +34,8 @@
 </template>
 
 <script>
-import DialogSchool from "../assets/AddSchoolDialog.vue"
-import EditSchool from "../assets/EditSchoolDialog.vue"
+import DialogSchool from "../assets/schools/AddSchoolDialog.vue"
+import EditSchool from "../assets/schools/EditSchoolDialog.vue"
 
 
 export default {
@@ -47,11 +46,11 @@ export default {
   name: 'HelloWorld',
   data(){
     return{
-      
       schoolName: '',
       schoolNumber: 5,
       editedTask: null,
       editedSchoolName: '',
+   //do wywalenia schools
       schools: [
           {
             id: 1,
@@ -78,7 +77,11 @@ export default {
         ]
     }
   },
-  
+  /* computed:{
+    schools(){
+      return this.$store.getters.getSchools
+    }
+  }, to do zrobienia*/
   methods:{
     goToSchoolPage() {
         this.$router.push(`/${this.schools.name}`);
@@ -105,15 +108,13 @@ export default {
     }
     },
     beforeCreate () {
-  if (this.$store.state.isLogged === false) {
+  if (this.$store.state.isLogged = false) {
     this.$router.push('/')
-  }
-}
+    
+      }
+    }
   }
   
-
-
-
 </script>
 
 <style>

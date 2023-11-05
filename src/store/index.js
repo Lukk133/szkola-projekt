@@ -1,16 +1,11 @@
 import { createStore } from 'vuex'
 
+import system from './modules/system'
+import cities from './modules/cities'
+
 export default createStore({
-      state: {
-        showAlert: false,
-        visible: false,
-        isLogged: false
-  },
-  getters: {
-  },
-  mutations: {
-  },
-  actions: {},
   modules: {
+    system,
+    cities
   }
 })

@@ -50,23 +50,13 @@ export default {
   name: 'HelloWorld',
   data(){
     return{
-      schoolName: '',
-      editedSchoolName: '',
-      schoolNumber: 5
+
     }
   },
 computed:{
     schools(){
       return this.$store.getters.getSchools
-    },
-    shoolNumber:{
-        get(){
-          return this.$store.getters.getSchoolNumber;
-        },
-        set(val) {
-          this.$store.commit("setSchoolNumber", val)
-        }
-      },
+    }
   },
   methods:{
     goToSchoolPage() {
@@ -76,7 +66,7 @@ computed:{
  //  let maxNumber = (Math.max(this.schoolNumber += 1))
         if(!editedTask){
         this.schools.push({
-          id: this.schoolNumber += 1,
+          id: this.$store.getters.getShoolNumber,
           name: schoolName
           }) 
         } else {

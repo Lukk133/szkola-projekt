@@ -35,7 +35,8 @@ export default{
     },
     */
     getters: {
-     getSchools: state => state.schools
+     getSchools: state => state.schools,
+     getShoolNumber: state => state.schoolNumber += 1
   },
     mutations:{
       setSchoolId(state, data){

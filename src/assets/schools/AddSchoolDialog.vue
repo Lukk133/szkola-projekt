@@ -7,7 +7,7 @@
   <template v-slot:default="{ isActive }">
     <v-card title="Wpisz nazwę szkoły" >
       <v-card-text >
-        <v-text-field v-model="schoolName"></v-text-field>
+        <v-text-field  v-model="schoolName" @input="updateSchoolName"></v-text-field>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -25,18 +25,22 @@
  
  <script>
 export default{
-  computed: {
+  data(){return{
+    schoolName: ''
+  }},
+ 
+ /* computed: {
     cities(){
       return this.$store.getters.getCities
     }
 
-  },
-  data(){
-    return{
-      schoolName: '',
-      schoolNumber: 5
-    }
-  },
+  },*/
+
+ /*computed:{
+      schoolName() {
+      return this.$store.state.schoolName
+      }
+    },*/
   methods:{
     addSchool(){
       this.$emit('addSchool', this.schoolName, false)
@@ -51,6 +55,9 @@ export default{
     },
     listCities(){
       this.$store.dispatch("listCities")
+    },
+    updateMessage(event) {
+      this.$store.commit('updateMessage', event.target.value)
     }
     
   }

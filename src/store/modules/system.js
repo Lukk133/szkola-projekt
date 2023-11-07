@@ -1,8 +1,10 @@
 export default {
   state: {
+    nazwa1: 'Nazwa 1',
+    nazwa2: 'Nazwa 2',
     showAlert: false,
     visible: false,
-    isLogged: false,
+    isLogged: true,
     alertMessage: "",
   },
   getters: {
@@ -10,6 +12,10 @@ export default {
     getVisible: state => state.visible,
     getIsLogged: state => state.isLogged,
     getAlertMessage: state => state.alertMessage,
+    getHalo: state => state.halo,
+      fullName: function (state) {
+        return `${state.nazwa1} ${state.nazwa2}`
+      }
   },
   mutations:{
     setShowAlert(state, data){
@@ -23,7 +29,7 @@ export default {
     },
     setAlertMessage(state, data){
       state.alertMessage = data;
-    }
+    },
   },
   actions: {
     showAlert(state, message) {

@@ -27,7 +27,7 @@
                   <td>{{ student.id }}</td>
                   <td>
                     <h3>
-                      <div class="links">{{ student.name }}</div>
+                      <div class="links text-left">{{ student.name }}</div>
                     </h3>
                   </td>
 
@@ -61,7 +61,7 @@
                   <td>{{ teacher.id }}</td>
                   <td>
                     <h3>
-                      <div class="links">{{ teacher.name }}</div>
+                      <div class="links text-left">{{ teacher.name }}</div>
                     </h3>
                   </td>
 
@@ -154,11 +154,11 @@ export default {
     },
 
   },
-  beforeCreate() {
-    if (this.$store.state.isLogged === false) {
-      this.$router.push('/')
+  beforeCreate () {
+  if (this.$store.state.isLogged = false) {
+    this.$router.push('/')
+      }
     }
-  }
 }
 
 </script>

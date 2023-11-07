@@ -11,11 +11,11 @@ const routes = [
   },
   {
     path: '/',
-    name: 'LoginPage',
+    name: 'LoginPage',//LoignPage
     component: LoginPage
   },
   {
-    path: '/:id',
+    path: `/:id`,
     name: 'SchoolPage',
     component: SchoolPage,
     props: true

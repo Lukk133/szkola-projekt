@@ -19,6 +19,8 @@
       </v-btn>
     </v-card>
   </div>
+
+ 
 </template>
 
 <script>
@@ -49,7 +51,7 @@ export default {
         set(val) {
           this.$store.commit("setIsLogged", val)
         }
-      }
+      },
          // visible() {
         //     return this.$store.getters.getVisible;
         // }
@@ -59,10 +61,8 @@ export default {
       if (this.userLogin.length <= 5 || this.userPassword.length <= 5
         || this.userLogin.length >= 50 || this.userPassword.length >= 50) { this.$store.dispatch("showAlert", "Hasło powinno mieć od 5 do 50 znaków") }
       else {
-        this.$store.getters = true
+        this.$store.state.isLogged = true
         this.$router.push(`/SchoolList`);
-
-
       }
     }
   }

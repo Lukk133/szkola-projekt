@@ -15,7 +15,7 @@
         size="large"
         class="ma-3 ml-4 mb-10"
           text="Dodaj"
-          @click="isActive.value = false, addSchool()"
+          @click="isActive.value = false, $store.dispatch('addSchool', this.schoolName)"
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -25,27 +25,7 @@
  
  <script>
 export default{
-  data(){return{
-    schoolName: ''
-  }},
- 
- /* computed: {
-    cities(){
-      return this.$store.getters.getCities
-    }
-
-  },*/
-
- /*computed:{
-      schoolName() {
-      return this.$store.state.schoolName
-      }
-    },*/
   methods:{
-    addSchool(){
-      this.$emit('addSchool', this.schoolName, false)
-
-    },
     schoolNameReset(){
       this.schoolName = ''
     },

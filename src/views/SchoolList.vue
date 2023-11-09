@@ -25,7 +25,7 @@
          
         </td>
 
-<EditSchool @EditSchool = "addSchool" @OpenedDialog = "setSchoolNumber(index)" :deafualtSchoolName="school.name"/>
+        <EditSchool @EditSchool="editSchoolName(index, school.name)" :defaultSchoolName="school.name" :index="index"/><!--@OpenedDialog="setSchoolNumber(index)"-->
 
         <v-icon @click="deleteSchool(index)" icon="fa fa-trash pl-5 mt-2"/>
       </tr>
@@ -59,26 +59,17 @@ computed:{
     }
   },
   methods:{
+    editSchoolName(index, name) {
+      this.$store.dispatch("editSchoolName", { index, name });
+    },
     goToSchoolPage() {
         this.$router.push(`/${this.schools.name}`);
       },
-      addSchool(schoolName, editedTask){
- //  let maxNumber = (Math.max(this.schoolNumber += 1))
-        if(!editedTask){
-        this.schools.push({
-          id: this.$store.getters.getShoolNumber,
-          name: schoolName
-          }) 
-        } else {
-          this.schools[this.indexSchoolNumber].name = schoolName
-        }
-      },
+      
       deleteSchool(index){
       this.schools.splice(index, 1)
     },
-    setSchoolNumber(index){
-      this.indexSchoolNumber = index
-    },
+    
     clearEdit(){   
         this.schoolName = ''
     }

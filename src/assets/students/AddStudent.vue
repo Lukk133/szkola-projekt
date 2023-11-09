@@ -14,7 +14,7 @@
         size="large"
         class="ma-3 ml-4 mb-10"
           text="Dodaj"
-          @click="isActive.value = false,  addStudent()"
+          @click="$store.dispatch('addStudent', this.studentName), isActive.value = false"
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -25,19 +25,12 @@
 
 <script>
 export default{
-  data(){
-    return{
-      studentName: '',
-      studentNumber: 0
-    }
-  },
   methods:{
-    addStudent(){
-      this.$emit('addStudent', this.studentName, false)
-    },
-    studentNameReset(){
+      studentNameReset(){
       this.studentName = ''
-    }
+    },
+
+  } 
   }
-}
+
 </script>

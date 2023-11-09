@@ -24,15 +24,14 @@
 
 <script>
 export default {
-  props:
-   ["defaultSchoolName", "index"],
-
-
   data() {
     return {
       schoolName: this.defaultSchoolName,
     };
   },
+  props:
+   ["defaultSchoolName", "index"],
+   
   computed: {
     schools() {
       return this.$store.getters.getSchools;

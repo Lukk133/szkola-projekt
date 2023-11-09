@@ -31,8 +31,7 @@
                     </h3>
                   </td>
 
-                  <EditStudentDialog @EditStudent="addStudent" @OpenedDialog="setStudentNumber(index)"
-                    :deafualtStudentName="student.name" />
+                  <EditStudentDialog @EditStudent="editStudentName(index, student.name)" :defaultStudentName="student.name" :index="index"/>
 
                   <v-icon @click="deleteStudent(index)" icon="fa fa-trash pl-5 mt-2" />
                 </tr>
@@ -65,8 +64,7 @@
                     </h3>
                   </td>
 
-                  <EditTeacherDialog @EditTeacher="addTeacher" @OpenedDialog="setTeacherNumber(index)"
-                    :deafualtTeacherName="teacher.name" />
+                 <EditTeacherDialog @EditTeacher="editTeacherName(index, teacher.name)" :defaultTeacherName="teacher.name" :index="index"/>
 
                   <v-icon @click="deleteTeacher(index)" icon="fa fa-trash pl-5 mt-2" />
                 </tr>
@@ -96,63 +94,34 @@ export default {
     AddTeacherDialog,
     EditTeacherDialog
   },
-  data() {
-    return {
-      studentNumber: 0,
-      teacherNumber: 0,
-      studentName: '',
-      teacherName: '',
-      editedTask1: null,
-      editedTask2: null,
-      students: [
-      ],
-      teachers: [
-      ]
+  props: ['id'],
+  computed:{
+    students(){
+      return this.$store.getters.getStudents
+    },
+    teachers(){
+      return this.$store.getters.getTeachers
     }
   },
-  props: ['id'],
-  methods: {
-    addStudent(studentName, editedTask1) {
-      if (!editedTask1) {
-        this.studentNumber += 1
-        this.students.push({
-          id: this.studentNumber,
-          name: studentName
-        })
-      } else {
-        this.students[this.indexStudentNumber].name = studentName
-      }
+  methods:{
+    editStudentName(index, name) {
+      this.$store.dispatch("editStudentName", { index, name });
     },
     deleteStudent(index) {
       this.students.splice(index, 1)
     },
-    setStudentNumber(index) {
-      this.indexStudentNumber = index
-    },
     clearEdit() {
       this.studentName = ''
     },
-    addTeacher(teacherName, editedTask2) {
-      if (!editedTask2) {
-        this.teacherNumber += 1
-        this.teachers.push({
-          id: this.teacherNumber,
-          name: teacherName
-        })
-      } else {
-        this.teachers[this.indexTeacherNumber].name = teacherName
-      }
+    editTeacherName(index, name) {
+      this.$store.dispatch("editTeacherName", { index, name });
     },
     deleteTeacher(index) {
       this.teachers.splice(index, 1)
     },
-    setTeacherNumber(index) {
-      this.indexTeacherNumber = index
-    },
     clearEdit() {
       this.teacherName = ''
-    },
-
+    }
   },
   beforeCreate () {
   if (this.$store.state.isLogged = false) {

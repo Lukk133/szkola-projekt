@@ -25,7 +25,8 @@
          
         </td>
 
-        <EditSchool @EditSchool="editSchoolName(index, school.name)" :defaultSchoolName="school.name" :index="index"/><!--@OpenedDialog="setSchoolNumber(index)"-->
+        <EditSchool @EditSchool="editSchoolName(index, school.name)" 
+        :defaultSchoolName="school.name" :index="index"/><!--@OpenedDialog="setSchoolNumber(index)"-->
 
         <v-icon @click="deleteSchool(index)" icon="fa fa-trash pl-5 mt-2"/>
       </tr>

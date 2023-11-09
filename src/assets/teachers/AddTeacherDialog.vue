@@ -14,7 +14,7 @@
         size="large"
         class="ma-3 ml-4 mb-10"
           text="Dodaj"
-          @click="isActive.value = false, addTeacher()"
+          @click="$store.dispatch('addTeacher', this.teacherName), isActive.value = false"
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -24,21 +24,10 @@
 
 <script>
 export default{
-  data(){
-    return{
-      teacherName: '',
-      teacherNumber: 0
-    }
-  },
   methods:{
-    addTeacher(){
-      this.$emit('addTeacher', this.teacherName, false)
-
-    },
-    teacherNameReset(){
+      teacherNameReset(){
       this.teacherName = ''
     }
-  }
-
+  } 
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
-  <v-dialog @click:outside="closeDialog, clearEdit()" height="450" width="500">
+  <v-dialog height="450" width="500">
   <template v-slot:activator="{ props }">
-    <v-icon  v-bind="props" @click="setDefaultName" icon="fa fa-edit pr-5 mt-2"/>
+    <v-icon @click=" $store.dispatch('editStudent', index)" v-bind="props" icon="fa fa-edit pr-5 mt-2"/>
   </template>
   <template v-slot:default="{ isActive }">
     <v-card title="Edytuj dane ucznia" >
@@ -13,8 +13,8 @@
         <v-btn
         size="large"
         class="ma-3 ml-4 mb-10"
-          text="Edytuj"
-          @click="editStudent(), isActive.value = false"
+        text="Edytuj"
+        @click="updateStudentName(index, studentName), isActive = false"
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -25,27 +25,24 @@
 
 <script>
   export default{
-    props:["deafualtStudentName"],
-    data(){
-      return{
-        studentName: ''
-      }
+  data() {
+    return {
+      studentName: this.defaultStudentName,
+    };
+  },
+  props:
+   ["defaultStudentName", "index"],
+
+  computed: {
+    schools() {
+      return this.$store.getters.getStudents;
     },
-    methods:{
-      editStudent(){
-      this.$emit('EditStudent', this.studentName, true)
-    },
-    clearEdit(){   
-        this.studentName = ''
-    },
-    setDefaultName(){
-     this.studentName = this.deafualtStudentName
-     this.$emit('OpenedDialog')
-    },
-    setStudentNumber(index){
-      this.indexStudentNumber = index
-    },
+  },
+  methods: {
+    updateStudentName(index, studentName) {
+    this.$store.dispatch('updateStudentName', { index, name: studentName });
   }
-}
+  },
+};
 
 </script>

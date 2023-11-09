@@ -30,7 +30,7 @@ export default{
       this.schoolName = ''
     },
     open(){
-      this.schoolNameReset()
+   //   this.schoolNameReset()
       this.listCities()
     },
     listCities(){

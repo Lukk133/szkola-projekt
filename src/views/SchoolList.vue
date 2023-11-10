@@ -1,7 +1,6 @@
 <template>
     <DialogSchool @addSchool = "addSchool"/>
-    
-   
+
   <v-table class="mx-4">
     <thead>
       <tr>
@@ -10,6 +9,9 @@
         </th>
         <th class="text-left">
           Nazwa szkoły
+        </th>
+        <th class="text-left">
+          Miasto
         </th>
       </tr>
     </thead>
@@ -24,6 +26,7 @@
           </RouterLink>
          
         </td>
+      <td>{{ school.city }} </td> 
 
         <EditSchool @EditSchool="editSchoolName(index, school.name)" 
         :defaultSchoolName="school.name" :index="index"/><!--@OpenedDialog="setSchoolNumber(index)"-->
@@ -57,6 +60,9 @@ export default {
 computed:{
     schools(){
       return this.$store.getters.getSchools
+    },
+    cities(){
+      return this.$store.getters.getCities
     }
   },
   methods:{

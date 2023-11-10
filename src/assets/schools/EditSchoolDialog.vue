@@ -31,7 +31,7 @@ export default {
   },
   props:
    ["defaultSchoolName", "index"],
-   
+  
   computed: {
     schools() {
       return this.$store.getters.getSchools;

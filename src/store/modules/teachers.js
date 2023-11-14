@@ -4,14 +4,26 @@ export default {
     teacherNumber: 0,
     teacherName: "",
     teachers: [],
+    teacher: {
+      name: "",
+    },
   },
   getters: {
     getTeachers: (state) => state.teachers,
+    getTeacher: (state) => state.teacher,
     getTeacherNumber: (state) => state.teacherNumber + 1,
   },
   mutations: {
-    setTeacher(state, data) {
+    setTeachers(state, data) {
       state.teachers = data;
+    },
+    setTeacher(state, data) {
+      state.teacher = data;
+    },
+    initTeacher(state) {
+      state.teacher = {
+        name: "",
+      };
     },
     updateTeacherName(state, { index, name }) {
       state.teachers[index].name = name;
@@ -21,13 +33,8 @@ export default {
     },
   },
   actions: {
-    addTeacher({ state, commit }, teacherName) {
-      state.teacherNumber++;
-      const newTeacher = {
-        id: state.teacherNumber,
-        name: teacherName,
-      };
-      commit("setTeacher", [...state.teachers, newTeacher]);
+    addTeacher({ state, commit }) {
+      commit("setTeachers", [...state.teachers, state.teacher]);
     },
     editTeacher({ commit }, index) {
       commit("editTeacher", index);

@@ -40,7 +40,7 @@ export default{
       this.$store.commit("initStudent")
     },
     save(){
-      this.dialog = true
+    //  this.dialog = true
       this.$store.dispatch("addStudent")
       this.close()
     },

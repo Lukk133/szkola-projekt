@@ -3,7 +3,7 @@
 
   <AddStudentDialog/>
 
-  <AddTeacherDialog @addTeacher="addTeacher" /> <!--dozmiany-->
+  <AddTeacherDialog/> <!--dozmiany-->
 
   <v-container>
     <v-row no-gutters>
@@ -29,9 +29,9 @@
                       <div class="links text-left">{{ student.name }}</div>
                     </h3>
                   </td>
-                  <v-icon @click="openEditDialog(index)" icon="fa fa-edit pl-5 mt-2 mr-4" />
+                  <v-icon @click="openStudentEdit(index)" icon="fa fa-edit pl-5 mt-2 mr-4" />
 
-                  <EditStudentDialog ref="editDialog"/>
+                  <EditStudentDialog ref="editStudentDialog"/>
 
                   <v-icon @click="deleteStudent(index)" icon="fa fa-trash pl-5 mt-2" />
                 </tr>
@@ -63,8 +63,9 @@
                       <div class="links text-left">{{ teacher.name }}</div>
                     </h3>
                   </td>
+                  <v-icon @click="openTeacherEdit(index)" icon="fa fa-edit pl-5 mt-2 mr-4"/>
 
-                 <EditTeacherDialog @EditTeacher="editTeacherName(index, teacher.name)" :defaultTeacherName="teacher.name" :index="index"/>
+                 <EditTeacherDialog ref="editTeacherDialog"/>
 
                   <v-icon @click="deleteTeacher(index)" icon="fa fa-trash pl-5 mt-2" />
                 </tr>
@@ -104,8 +105,8 @@ export default {
     }
   },
   methods:{
-    openEditDialog(index){
-      this.$refs.editDialog[index].open()
+    openStudentEdit(index){
+      this.$refs.editStudentDialog[index].open()
     },
     editStudentName(index, name) {
       this.$store.dispatch("editStudentName", { index, name });
@@ -115,6 +116,9 @@ export default {
     },
     clearEdit() {
       this.studentName = ''
+    },
+    openTeacherEdit(index){
+      this.$refs.editTeacherDialog[index].open()
     },
     editTeacherName(index, name) {
       this.$store.dispatch("editTeacherName", { index, name });

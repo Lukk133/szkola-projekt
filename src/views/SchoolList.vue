@@ -1,5 +1,5 @@
 <template>
-    <DialogSchool @addSchool = "addSchool"/>
+    <DialogSchool/>
 
   <v-table class="mx-4">
     <thead>
@@ -28,8 +28,8 @@
         </td>
       <td>{{ school.city }} </td> 
 
-        <EditSchool @EditSchool="editSchoolName(index, school.name)" 
-        :defaultSchoolName="school.name" :index="index"/><!--@OpenedDialog="setSchoolNumber(index)"-->
+      <v-icon @click="openSchoolEdit(index)" icon="fa fa-edit pl-5 mt-2 mr-4"/>
+        <EditSchool ref="editSchoolDialog" />
 
         <v-icon @click="deleteSchool(index)" icon="fa fa-trash pl-5 mt-2"/>
       </tr>
@@ -66,6 +66,9 @@ computed:{
     }
   },
   methods:{
+    openSchoolEdit(index){
+      this.$refs.editSchoolDialog[index].open()
+    },
     editSchoolName(index, name) {
       this.$store.dispatch("editSchoolName", { index, name });
     },

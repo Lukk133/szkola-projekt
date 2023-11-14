@@ -2,6 +2,10 @@ export default {
   state: {
     indexSchoolNumber: "",
     schoolNumber: 5,
+    school: {
+      name: "",
+      city: "",
+    },
     schools: [
       {
         id: 1,
@@ -32,12 +36,20 @@ export default {
   },
   getters: {
     getSchools: (state) => state.schools,
+    getSchool: (state) => state.school,
     getSchoolNumber: (state) => state.schoolNumber + 1,
-    //  getCities: (state) => state.cities,
   },
   mutations: {
-    setSchool(state, data) {
+    setSchools(state, data) {
       state.schools = data;
+    },
+    setSchool(state, data) {
+      state.school = data;
+    },
+    initSchool(state) {
+      state.student = {
+        name: "",
+      };
     },
     updateSchoolName(state, { index, name }) {
       state.schools[index].name = name;
@@ -47,14 +59,8 @@ export default {
     },
   },
   actions: {
-    addSchool({ state, commit }, schoolData) {
-      state.schoolNumber++;
-      const newSchool = {
-        id: state.schoolNumber,
-        name: schoolData.schoolName,
-        city: schoolData.selectedCity,
-      };
-      commit("setSchool", [...state.schools, newSchool]);
+    addSchool({ state, commit }) {
+      commit("setSchools", [...state.schools, state.school]);
     },
     editSchool({ commit }, index) {
       commit("editSchool", index);

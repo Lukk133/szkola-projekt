@@ -47,8 +47,9 @@ export default {
       state.school = data;
     },
     initSchool(state) {
-      state.student = {
+      state.school = {
         name: "",
+        city: "",
       };
     },
     updateSchoolName(state, { index, name }) {

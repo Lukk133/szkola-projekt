@@ -39,7 +39,7 @@ export default{
       this.dialog = true
     },
     save(){
-      this.teacher = newTeacher
+      this.teacher = this.newTeacher
       this.close()
     },
     close(){

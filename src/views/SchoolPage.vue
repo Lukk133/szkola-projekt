@@ -1,9 +1,9 @@
 <template>
   <h1 class="text-center">Strona szkoły {{ $route.params.id }}</h1>
 
-  <AddStudentDialog @addStudent="addStudent" />
+  <AddStudentDialog/>
 
-  <AddTeacherDialog @addTeacher="addTeacher" />
+  <AddTeacherDialog @addTeacher="addTeacher" /> <!--dozmiany-->
 
   <v-container>
     <v-row no-gutters>
@@ -23,15 +23,15 @@
               </thead>
               <tbody>
                 <tr v-for="(student, index) in students" :key="student.name">
-
                   <td>{{ student.id }}</td>
                   <td>
                     <h3>
                       <div class="links text-left">{{ student.name }}</div>
                     </h3>
                   </td>
+                  <v-icon @click="openEditDialog(index)" icon="fa fa-edit pl-5 mt-2 mr-4" />
 
-                  <EditStudentDialog @EditStudent="editStudentName(index, student.name)" :defaultStudentName="student.name" :index="index"/>
+                  <EditStudentDialog ref="editDialog"/>
 
                   <v-icon @click="deleteStudent(index)" icon="fa fa-trash pl-5 mt-2" />
                 </tr>
@@ -104,6 +104,9 @@ export default {
     }
   },
   methods:{
+    openEditDialog(index){
+      this.$refs.editDialog[index].open()
+    },
     editStudentName(index, name) {
       this.$store.dispatch("editStudentName", { index, name });
     },

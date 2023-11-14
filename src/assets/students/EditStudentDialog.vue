@@ -1,12 +1,11 @@
 <template>
-  <v-dialog height="450" width="500">
-  <template v-slot:activator="{ props }">
-    <v-icon @click=" $store.dispatch('editStudent', index)" v-bind="props" icon="fa fa-edit pr-5 mt-2"/>
+  <v-dialog height="450" width="500" v-model="dialog">
+  <template v-slot:activator="{ }">
   </template>
-  <template v-slot:default="{ isActive }">
+  <template v-slot:default="{ }">
     <v-card title="Edytuj dane ucznia" >
       <v-card-text >
-        <v-text-field v-model="studentName"></v-text-field>
+        <v-text-field v-model="student.name"></v-text-field>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -14,7 +13,7 @@
         size="large"
         class="ma-3 ml-4 mb-10"
         text="Edytuj"
-        @click="updateStudentName(index, studentName), isActive = false"
+        @click="save"
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -27,22 +26,26 @@
   export default{
   data() {
     return {
-      studentName: this.defaultStudentName,
+      dialog: false
     };
   },
-  props:
-   ["defaultStudentName", "index"],
-
   computed: {
-    schools() {
-      return this.$store.getters.getStudents;
-    },
+    student() {
+      return this.$store.getters.getStudent;
+    }
   },
   methods: {
-    updateStudentName(index, studentName) {
-    this.$store.dispatch('updateStudentName', { index, name: studentName });
+   open(){
+    this.dialog = true
+   },
+   save(){
+    this.student = this.newStudent
+    this.close()
+   },
+   close(){
+    this.dialog = false
+   }
   }
-  },
-};
+  }
 
 </script>

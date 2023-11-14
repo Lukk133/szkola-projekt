@@ -4,14 +4,26 @@ export default {
     studentNumber: 0,
     studentName: "",
     students: [],
+    student: {
+      name: "",
+    },
   },
   getters: {
+    getStudent: (state) => state.student,
     getStudents: (state) => state.students,
     getStudentNumber: (state) => state.studentNumber + 1,
   },
   mutations: {
     setStudent(state, data) {
+      state.student = data;
+    },
+    setStudents(state, data) {
       state.students = data;
+    },
+    initStudent(state) {
+      state.student = {
+        name: "",
+      };
     },
     updateStudentName(state, { index, name }) {
       state.students[index].name = name;
@@ -21,13 +33,9 @@ export default {
     },
   },
   actions: {
-    addStudent({ state, commit }, studentName) {
-      state.studentNumber++;
-      const newStudent = {
-        id: state.studentNumber,
-        name: studentName,
-      };
-      commit("setStudent", [...state.students, newStudent]);
+    addStudent({ state, commit }) {
+      commit("setStudents", [...state.students, state.student]);
+      //alblo jak nie bedzie działać powyższe  commit("setStudent", [...state.students, state.student]);
     },
     editStudent({ commit }, index) {
       commit("editStudent", index);

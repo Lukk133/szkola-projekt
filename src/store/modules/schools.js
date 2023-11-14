@@ -54,7 +54,6 @@ export default {
         name: schoolData.schoolName,
         city: schoolData.selectedCity,
       };
-      console.log(schoolData.selectedCity);
       commit("setSchool", [...state.schools, newSchool]);
     },
     editSchool({ commit }, index) {

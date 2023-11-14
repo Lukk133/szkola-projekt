@@ -19,7 +19,6 @@ export default {
           country: "malta",
         })
         .then((response) => {
-          //     console.log(response.data.data.map((city) => city));
           const cities = response.data.data.map((city) => city);
           commit("setCities", cities);
         })
@@ -29,9 +28,3 @@ export default {
     },
   },
 };
-
-/*   addCity({ state, commit }, cityName) {
-      const newCity = {
-        name: cityName,
-      };
-      commit("setCities", [...state.cities, newCity]);*/

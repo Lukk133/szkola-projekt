@@ -1,3 +1,4 @@
+import axios from "axios";
 export default {
   state: {
     indexSchoolNumber: "",
@@ -6,33 +7,7 @@ export default {
       name: "",
       city: "",
     },
-    schools: [
-      {
-        id: 1,
-        name: "XIV LO im. Stanisława Staszica",
-        city: "halo",
-      },
-      {
-        id: 2,
-        name: "V LO im. Augusta Witkowskiego",
-        city: "halo",
-      },
-      {
-        id: 3,
-        name: "XIII LO",
-        city: "halo",
-      },
-      {
-        id: 4,
-        name: "Uniwersyteckie LO",
-        city: "halo2",
-      },
-      {
-        id: 5,
-        name: "III LO z Oddz. Dwujęz. im. Marynarki Wojennej RP",
-        city: "halo2",
-      },
-    ],
+    schools: [],
   },
   getters: {
     getSchools: (state) => state.schools,
@@ -69,5 +44,74 @@ export default {
     updateSchoolName({ commit }, { index, name }) {
       commit("updateSchoolName", { index, name });
     },
+    getAllSchools({ commit }) {
+      axios
+        .get("http://api.oskmanager.pl/api/schools")
+        .then((response) => {
+          console.log(response.data);
+          const listSchools = response.data.map((school) => {
+            return {
+              id: school.location.id,
+              name: school.name,
+            };
+          });
+          commit("setSchools", listSchools);
+          console.log(listSchools);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
+
+//  const cities = response.data.data.map((city) => city);
+
+/*
+listCities({ commit }) {
+      axios
+        .post("https://countriesnow.space/api/v0.1/countries/cities", {
+          country: "malta",
+        })
+        .then((response) => {
+          const cities = response.data.data.map((city) => city);
+          commit("setCities", cities);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+
+     getAllSchools() {
+      axios
+        .get("http://api.oskmanager.pl/api/schools")
+        .then((response) => {
+          const schoolId = response.data.map((school) => {
+            return school.location.id;
+          });
+          console.log(schoolId);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+addSchoolPost({ state, commit }) {
+      console.log(this.state.school);
+      axios
+        .post("http://api.oskmanager.pl/api/schools", {
+          name: this.state.school,
+          location: {
+            lat: 35.917973,
+            lng: 14.409943,
+          },
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      commit("setSchools", [...state.schools, state.school]);
+    }, */

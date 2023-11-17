@@ -29,10 +29,12 @@
         />
         <EditSchool ref="editSchoolDialog" />
 
-        <v-icon @click="deleteSchool(index)" icon="fa fa-trash pl-5 mt-2" />
+        <v-icon @click="deleteSchool(index), refresh" icon="fa fa-trash pl-5 mt-2" />
       </tr>
     </tbody>
   </v-table>
+
+  <v-btn @click="zapytaj">adkjsl;jl</v-btn>
 </template>
 
 <script>
@@ -57,6 +59,9 @@ export default {
     },
   },
   methods: {
+    zapytaj() {
+      this.$store.dispatch("addSchoolPost");
+    },
     openSchoolEdit(index) {
       this.$refs.editSchoolDialog[index].open();
     },
@@ -66,17 +71,19 @@ export default {
     goToSchoolPage() {
       this.$router.push(`/${this.schools.name}`);
     },
-
     deleteSchool(index) {
-      this.schools.splice(index, 1);
+      const schoolId = this.schools[index].id;
+      this.$store.dispatch("deleteSchool", schoolId);
     },
-
+    refresh(){
+      this.$store.dispatch("listAllSchools");
+    },
     clearEdit() {
       this.schoolName = "";
     },
   },
   created() {
-    this.$store.dispatch("getAllSchools");
+    this.$store.dispatch("listAllSchools");
   },
   beforeCreate() {
     if ((this.$store.state.isLogged = false)) {

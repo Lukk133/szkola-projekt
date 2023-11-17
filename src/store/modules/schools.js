@@ -33,6 +33,9 @@ export default {
     editSchool(index) {
       this.state.indexSchoolNumber = index;
     },
+    deleteSchool(state, index) {
+      state.schools.splice(index, 1);
+    },
   },
   actions: {
     addSchool({ state, commit }) {
@@ -44,11 +47,10 @@ export default {
     updateSchoolName({ commit }, { index, name }) {
       commit("updateSchoolName", { index, name });
     },
-    getAllSchools({ commit }) {
+    listAllSchools({ commit }) {
       axios
         .get("http://api.oskmanager.pl/api/schools")
         .then((response) => {
-          console.log(response.data);
           const listSchools = response.data.map((school) => {
             return {
               id: school.location.id,
@@ -56,7 +58,34 @@ export default {
             };
           });
           commit("setSchools", listSchools);
-          console.log(listSchools);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    addSchoolPost({ commit, getters }) {
+      console.log(getters.getSchool.name);
+      const schoolData = {
+        name: getters.getSchool.name,
+        location: {
+          lat: 40.7128,
+          lng: -74.006,
+        },
+      };
+      axios
+        .post("http://api.oskmanager.pl/api/schools", schoolData)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    deleteSchool({ commit }, schoolId) {
+      axios
+        .delete(`http://api.oskmanager.pl/api/schools/${schoolId}`)
+        .then((response) => {
+          commit("deleteSchool", schoolId);
         })
         .catch((error) => {
           console.log(error);
@@ -64,6 +93,8 @@ export default {
     },
   },
 };
+
+/* */
 
 //  const cities = response.data.data.map((city) => city);
 
@@ -97,21 +128,6 @@ listCities({ commit }) {
         });
     },
 
-addSchoolPost({ state, commit }) {
-      console.log(this.state.school);
-      axios
-        .post("http://api.oskmanager.pl/api/schools", {
-          name: this.state.school,
-          location: {
-            lat: 35.917973,
-            lng: 14.409943,
-          },
-        })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+
       commit("setSchools", [...state.schools, state.school]);
     }, */

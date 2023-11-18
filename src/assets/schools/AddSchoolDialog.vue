@@ -25,7 +25,7 @@
             class="ml-4 mt-5 mb-9 w-50 h-50"
             label="Wybierz miasto"
             :items="cities"
-            v-model="school.city"
+            v-model="selectedCity"
           ></v-select>
           <v-spacer></v-spacer>
           <v-btn
@@ -34,6 +34,7 @@
             text="Dodaj"
             @click="save"
           ></v-btn>
+          <div v-if="$store.state.showAlert"></div>
         </v-card-actions>
       </v-card>
     </template>
@@ -66,7 +67,7 @@ export default {
       this.$store.commit("initSchool");
     },
     save() {
-      this.$store.dispatch("addSchoolPost");
+      this.$store.dispatch("addSchoolPost", this.selectedCity);
       this.close();
     },
     close() {

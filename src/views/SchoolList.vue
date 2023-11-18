@@ -29,22 +29,26 @@
         />
         <EditSchool ref="editSchoolDialog" />
 
-        <v-icon @click="deleteSchool(index), refresh" icon="fa fa-trash pl-5 mt-2" />
+        <v-icon
+          @click="deleteSchool((schoolId = school.id))"
+          icon="fa fa-trash pl-5 mt-2"
+        />
       </tr>
     </tbody>
   </v-table>
-
-  <v-btn @click="zapytaj">adkjsl;jl</v-btn>
+  <SchoolAlert />
 </template>
 
 <script>
 import DialogSchool from "../assets/schools/AddSchoolDialog.vue";
 import EditSchool from "../assets/schools/EditSchoolDialog.vue";
+import SchoolAlert from "../assets/notifications/SchoolAlert.vue";
 
 export default {
   components: {
     DialogSchool,
     EditSchool,
+    SchoolAlert,
   },
   name: "HelloWorld",
   data() {
@@ -59,9 +63,6 @@ export default {
     },
   },
   methods: {
-    zapytaj() {
-      this.$store.dispatch("addSchoolPost");
-    },
     openSchoolEdit(index) {
       this.$refs.editSchoolDialog[index].open();
     },
@@ -71,25 +72,22 @@ export default {
     goToSchoolPage() {
       this.$router.push(`/${this.schools.name}`);
     },
-    deleteSchool(index) {
-      const schoolId = this.schools[index].id;
-      this.$store.dispatch("deleteSchool", schoolId);
-    },
-    refresh(){
-      this.$store.dispatch("listAllSchools");
+    deleteSchool(schoolId) {
+      this.$store.dispatch("deleteSchool", schoolId - 1);
     },
     clearEdit() {
       this.schoolName = "";
     },
   },
   created() {
-    this.$store.dispatch("listAllSchools");
+    this.$store.dispatch("listAllSchools"),
+      this.$store.dispatch("addStudentPost");
   },
-  beforeCreate() {
-    if ((this.$store.state.isLogged = false)) {
-      this.$router.push("/");
-    }
-  },
+  //beforeCreate() {
+  //if (this.$store.state.isLogged === false) {
+  // this.$router.push("/");
+  //}
+  //},
 };
 </script>
 

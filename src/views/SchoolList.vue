@@ -14,7 +14,7 @@
       <tr v-for="(school, index) in schools" :key="school.name">
         <td>{{ school.id }}</td>
         <td>
-          <RouterLink :to="{ name: 'SchoolPage', params: { id: school.name } }">
+          <RouterLink :to="{ name: 'SchoolPage', params: { id: school.id } }">
             <h2>
               <div type="input" @click="goToSchoolPage()" class="text-left">
                 {{ school.name }}
@@ -70,10 +70,10 @@ export default {
       this.$store.dispatch("editSchoolName", { index, name });
     },
     goToSchoolPage() {
-      this.$router.push(`/${this.schools.name}`);
+      this.$router.push(`/${"halo"}`);
     },
     deleteSchool(schoolId) {
-      this.$store.dispatch("deleteSchool", schoolId - 1);
+      this.$store.dispatch("deleteSchool", schoolId);
     },
     clearEdit() {
       this.schoolName = "";
@@ -81,7 +81,8 @@ export default {
   },
   created() {
     this.$store.dispatch("listAllSchools"),
-      this.$store.dispatch("addStudentPost");
+      //  this.$store.dispatch("addStudentPost");
+      this.$store.dispatch("listAllStudents");
   },
   //beforeCreate() {
   //if (this.$store.state.isLogged === false) {

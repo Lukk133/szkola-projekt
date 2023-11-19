@@ -3,8 +3,7 @@ import axios from "axios";
 export default {
   state: {
     indexStudentNumber: "",
-    studentNumber: 0,
-    studentName: "",
+    //  studentName: "",
     students: [],
     student: {
       name: "",
@@ -25,6 +24,7 @@ export default {
     initStudent(state) {
       state.student = {
         name: "",
+        email: "",
       };
     },
     updateStudentName(state, { index, name }) {
@@ -35,98 +35,57 @@ export default {
     },
   },
   actions: {
-    addStudent({ state, commit }) {
-      commit("setStudents", [...state.students, state.student]);
-      //alblo jak nie bedzie działać powyższe  commit("setStudent", [...state.students, state.student]);
-    },
     editStudent({ commit }, index) {
       commit("editStudent", index);
     },
     updateStudentName({ commit }, { index, name }) {
       commit("updateStudentName", { index, name });
     },
+    listAllStudents({ commit }) {
+      axios
+        .get("http://api.oskmanager.pl/api/students?size=20")
+        .then((response) => {
+          const listStudents = response.data.content.map((student) => {
+            return {
+              id: student.id,
+              name: student.name,
+              email: student.email,
+            };
+          });
+          commit("setStudents", listStudents);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     addStudentPost({ dispatch, getters }) {
       const studentData = {
-        email: "student@example.com",
+        email: getters.getStudent.email,
         password: "Password123!",
-        user: {
-          id: 5,
-          createdAt: "2023-11-18T16:27:15.961Z",
-          updatedAt: "2023-11-18T16:27:15.961Z",
-          deleted: true,
-          name: "string",
-          lastName: "string",
-          email: "string",
-          phoneNumber: "string",
-          password: "string",
-          avatar: {
-            id: 5,
-            createdAt: "2023-11-18T16:27:15.961Z",
-            updatedAt: "2023-11-18T16:27:15.961Z",
-            deleted: true,
-            path: "string",
-            contentType: "string",
-            size: 0,
-            name: "string",
-          },
-          school: {
-            id: 5,
-            createdAt: "2023-11-18T16:27:15.961Z",
-            updatedAt: "2023-11-18T16:27:15.961Z",
-            deleted: true,
-            code: "string",
-            name: "string",
-            location: {
-              id: 5,
-              createdAt: "2023-11-18T16:27:15.961Z",
-              updatedAt: "2023-11-18T16:27:15.961Z",
-              deleted: true,
-              lat: 0,
-              lng: 0,
-              street: "string",
-              city: {
-                id: 5,
-                createdAt: "2023-11-18T16:27:15.961Z",
-                updatedAt: "2023-11-18T16:27:15.961Z",
-                deleted: true,
-                name: "string",
-              },
-              name: "string",
-            },
-            logo: {
-              id: 5,
-              createdAt: "2023-11-18T16:27:15.961Z",
-              updatedAt: "2023-11-18T16:27:15.961Z",
-              deleted: true,
-              path: "string",
-              contentType: "string",
-              size: 0,
-              name: "string",
-            },
-          },
-          roles: [
-            {
-              id: 5,
-              createdAt: "2023-11-18T16:27:15.961Z",
-              updatedAt: "2023-11-18T16:27:15.961Z",
-              deleted: true,
-              name: "string",
-            },
-          ],
-        },
         pesel: "12345678901",
         pkk: "PKK12345",
-        name: "John",
-        lastName: "Doe",
+        name: getters.getStudent.name,
+        lastName: "",
         phoneNumber: "+48123456789",
+        schoolId: 272,
       };
       axios
         .post("http://api.oskmanager.pl/api/students", studentData)
         .then((response) => {
-          console.log(response);
+          dispatch("listAllStudents");
         })
         .catch((error) => {
-          console.log(error.response);
+          console.log(error);
+        });
+    },
+    deleteStudent({ dispatch }, studentId) {
+      axios
+        .delete(`http://api.oskmanager.pl/api/students/${studentId}`)
+        .then((response) => {
+          dispatch("listAllStudents");
+        })
+        .catch((error) => {
+          console.log(error);
         });
     },
   },

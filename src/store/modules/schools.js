@@ -4,7 +4,6 @@ export default {
     alertMessageName: "",
     showAlertName: false,
     indexSchoolNumber: "",
-    schoolNumber: 5,
     school: {
       name: "",
       city: "",
@@ -16,7 +15,6 @@ export default {
     getAlertMessageName: (state) => state.alertMessageName,
     getSchools: (state) => state.schools,
     getSchool: (state) => state.school,
-    getSchoolNumber: (state) => state.schoolNumber + 1,
   },
   mutations: {
     setSchools(state, data) {
@@ -95,7 +93,7 @@ export default {
     },
     deleteSchool({ dispatch }, schoolId) {
       axios
-        .delete(`http://api.oskmanager.pl/api/schools/${schoolId}`)
+        .delete(`http://api.oskmanager.pl/api/schools/${schoolId - 2}`)
         .then((response) => {
           dispatch("listAllSchools");
         })

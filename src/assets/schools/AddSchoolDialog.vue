@@ -58,15 +58,15 @@ export default {
     },
   },
   methods: {
-    schoolNameReset() {
-      this.schoolName = "";
-    },
     open() {
       this.dialog = true;
       this.listCities();
       this.$store.commit("initSchool");
     },
     save() {
+      if (this.school.name === "") {
+        this.checkName;
+      }
       this.$store.dispatch("addSchoolPost", this.selectedCity);
       this.close();
     },

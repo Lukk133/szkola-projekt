@@ -14,13 +14,10 @@
       <tr v-for="(school, index) in schools" :key="school.name">
         <td>{{ school.id }}</td>
         <td>
-          <RouterLink :to="{ name: 'SchoolPage', params: { id: school.id } }">
-            <h2>
-              <div type="input" @click="goToSchoolPage()" class="text-left">
-                {{ school.name }}
-              </div>
-            </h2>
-          </RouterLink>
+          <h2 @click="goToSchoolPage(school.id)">
+            {{ school.name }}
+          </h2>
+          <!--<RouterLink :to="{ name: 'SchoolPage', params: { id: school.id } }">   </RouterLink> -->
         </td>
         <td>{{ school.city }}</td>
         <v-icon
@@ -69,8 +66,10 @@ export default {
     editSchoolName(index, name) {
       this.$store.dispatch("editSchoolName", { index, name });
     },
-    goToSchoolPage() {
-      this.$router.push(`/${"halo"}`);
+    goToSchoolPage(schoolId) {
+      this.$router.push({ name: "SchoolPage", params: { id: schoolId } });
+      this.$store.commit("setSelectedSchool", schoolId);
+      this.$store.commit("setSelectedSchool", schoolId);
     },
     deleteSchool(schoolId) {
       this.$store.dispatch("deleteSchool", schoolId);
@@ -81,8 +80,8 @@ export default {
   },
   created() {
     this.$store.dispatch("listAllSchools"),
-      //  this.$store.dispatch("addStudentPost");
       this.$store.dispatch("listAllStudents");
+    this.$store.dispatch("listAllTeachers");
   },
   //beforeCreate() {
   //if (this.$store.state.isLogged === false) {

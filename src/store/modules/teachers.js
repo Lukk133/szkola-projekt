@@ -2,11 +2,11 @@ import axios from "axios";
 export default {
   state: {
     indexTeacherNumber: "",
-    // teacherName: "",
     teachers: [],
     teacher: {
       name: "",
     },
+    selectedSchoolId: 279,
   },
   getters: {
     getTeachers: (state) => state.teachers,
@@ -31,6 +31,9 @@ export default {
     },
     editTeacher(index) {
       this.state.indexTeacherNumber = index;
+    },
+    setSelectedSchool(state, schoolId) {
+      state.selectedSchoolId = schoolId - 1;
     },
   },
   actions: {
@@ -57,19 +60,16 @@ export default {
           console.log(error);
         });
     },
-    addTeacherPost({ dispatch, getters }) {
+    addTeacher({ dispatch, getters, state }) {
       const teacherData = {
+        name: getters.getTeacher.name,
         email: getters.getTeacher.email,
+        schoolId: state.selectedSchoolId - 1,
+        lastName: "",
         password: "Password123!",
         pesel: "12345678901",
         pkk: "PKK12345",
-        name: getters.getTeacher.name,
-        lastName: "",
         phoneNumber: "+48123456789",
-        schoolId: 272, //to do zmiany
-        course: {
-          id: 0,
-        },
         courseTypeId: 1,
       };
       axios

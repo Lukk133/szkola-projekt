@@ -54,7 +54,7 @@ export default {
         .get("http://api.oskmanager.pl/api/schools")
         .then((response) => {
           const listSchools = response.data.map((school) => {
-            //          console.log(selectedCity);
+            console.log(selectedCity);
             //            console.log(school.location.city.name);
             return {
               id: school.location.id,
@@ -68,7 +68,7 @@ export default {
           console.log(error);
         });
     },
-    addSchoolPost({ dispatch, getters }, selectedCity) {
+    addSchool({ dispatch, getters }, selectedCity) {
       const schoolData = {
         name: getters.getSchool.name,
         location: {

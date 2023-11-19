@@ -3,11 +3,11 @@ import axios from "axios";
 export default {
   state: {
     indexStudentNumber: "",
-    //  studentName: "",
     students: [],
     student: {
       name: "",
     },
+    selectedSchoolId: 279,
   },
   getters: {
     getStudent: (state) => state.student,
@@ -26,6 +26,9 @@ export default {
         name: "",
         email: "",
       };
+    },
+    setSelectedSchool(state, schoolId) {
+      state.selectedSchoolId = schoolId - 1;
     },
     updateStudentName(state, { index, name }) {
       state.students[index].name = name;
@@ -58,16 +61,17 @@ export default {
           console.log(error);
         });
     },
-    addStudentPost({ dispatch, getters }) {
+    addStudent({ dispatch, getters, state }) {
+      //  console.log(state.selectedSchoolId);
       const studentData = {
         email: getters.getStudent.email,
+        schoolId: state.selectedSchoolId - 1,
         password: "Password123!",
         pesel: "12345678901",
         pkk: "PKK12345",
         name: getters.getStudent.name,
         lastName: "",
         phoneNumber: "+48123456789",
-        schoolId: 272,
       };
       axios
         .post("http://api.oskmanager.pl/api/students", studentData)

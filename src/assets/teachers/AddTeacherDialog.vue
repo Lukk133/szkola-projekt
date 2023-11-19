@@ -61,7 +61,7 @@ export default {
       if (!emailRegex.test(this.teacher.email) || this.teacher.name === "") {
         this.checkEmail = true;
       } else {
-        this.$store.dispatch("addTeacherPost");
+        this.$store.dispatch("addTeacher");
         this.checkEmail = false;
         this.close();
       }

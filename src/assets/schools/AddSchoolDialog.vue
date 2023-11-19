@@ -67,7 +67,7 @@ export default {
       if (this.school.name === "") {
         this.checkName;
       }
-      this.$store.dispatch("addSchoolPost", this.selectedCity);
+      this.$store.dispatch("addSchool", this.selectedCity);
       this.close();
     },
     close() {

@@ -26,23 +26,11 @@ export default {
         email: "",
       };
     },
-    updateTeacherName(state, { index, name }) {
-      state.teachers[index].name = name;
-    },
-    editTeacher(index) {
-      this.state.indexTeacherNumber = index;
-    },
     setSelectedSchool(state, schoolId) {
       state.selectedSchoolId = schoolId - 1;
     },
   },
   actions: {
-    editTeacher({ commit }, index) {
-      commit("editTeacher", index);
-    },
-    updateTeacherName({ commit }, { index, name }) {
-      commit("updateTeacherName", { index, name });
-    },
     listAllTeachers({ commit }) {
       axios
         .get("http://api.oskmanager.pl/api/instructors?size=20")

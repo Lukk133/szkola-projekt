@@ -3,7 +3,6 @@ export default {
   state: {
     alertMessageName: "",
     showAlertName: false,
-    indexSchoolNumber: "",
     school: {
       name: "",
       city: "",
@@ -29,12 +28,6 @@ export default {
         city: "",
       };
     },
-    updateSchoolName(state, { index, name }) {
-      state.schools[index].name = name;
-    },
-    editSchool(index) {
-      this.state.indexSchoolNumber = index;
-    },
     setAlertMessageName(state, data) {
       state.alertMessageName = data;
     },
@@ -43,13 +36,7 @@ export default {
     },
   },
   actions: {
-    editSchool({ commit }, index) {
-      commit("editSchool", index);
-    },
-    updateSchoolName({ commit }, { index, name }) {
-      commit("updateSchoolName", { index, name });
-    },
-    listAllSchools({ commit, getters }, selectedCity) {
+    listAllSchools({ commit }, selectedCity) {
       axios
         .get("http://api.oskmanager.pl/api/schools")
         .then((response) => {

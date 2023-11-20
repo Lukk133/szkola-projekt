@@ -20,16 +20,7 @@
           <!--<RouterLink :to="{ name: 'SchoolPage', params: { id: school.id } }">   </RouterLink> -->
         </td>
         <td>{{ school.city }}</td>
-        <v-icon
-          @click="openSchoolEdit(index)"
-          icon="fa fa-edit pl-5 mt-2 mr-4"
-        />
-        <EditSchool ref="editSchoolDialog" />
-
-        <v-icon
-          @click="deleteSchool((schoolId = school.id))"
-          icon="fa fa-trash pl-5 mt-2"
-        />
+        <v-icon @click="deleteSchool((schoolId = school.id))" icon="fa fa-trash pl-5 mt-2" />
       </tr>
     </tbody>
   </v-table>
@@ -38,13 +29,11 @@
 
 <script>
 import DialogSchool from "../assets/schools/AddSchoolDialog.vue";
-import EditSchool from "../assets/schools/EditSchoolDialog.vue";
 import SchoolAlert from "../assets/notifications/SchoolAlert.vue";
 
 export default {
   components: {
     DialogSchool,
-    EditSchool,
     SchoolAlert,
   },
   name: "HelloWorld",
@@ -60,12 +49,6 @@ export default {
     },
   },
   methods: {
-    openSchoolEdit(index) {
-      this.$refs.editSchoolDialog[index].open();
-    },
-    editSchoolName(index, name) {
-      this.$store.dispatch("editSchoolName", { index, name });
-    },
     goToSchoolPage(schoolId) {
       this.$router.push({ name: "SchoolPage", params: { id: schoolId } });
       this.$store.commit("setSelectedSchool", schoolId);

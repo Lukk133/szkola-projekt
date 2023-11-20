@@ -30,20 +30,8 @@ export default {
     setSelectedSchool(state, schoolId) {
       state.selectedSchoolId = schoolId - 1;
     },
-    updateStudentName(state, { index, name }) {
-      state.students[index].name = name;
-    },
-    editStudent(index) {
-      this.state.indexStudentNumber = index;
-    },
   },
   actions: {
-    editStudent({ commit }, index) {
-      commit("editStudent", index);
-    },
-    updateStudentName({ commit }, { index, name }) {
-      commit("updateStudentName", { index, name });
-    },
     listAllStudents({ commit }) {
       axios
         .get("http://api.oskmanager.pl/api/students?size=20")

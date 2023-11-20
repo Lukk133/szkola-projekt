@@ -27,17 +27,7 @@
                       <div class="links text-left">{{ student.name }}</div>
                     </h3>
                   </td>
-                  <v-icon
-                    @click="openStudentEdit(index)"
-                    icon="fa fa-edit pl-5 mt-2 mr-4"
-                  />
-
-                  <EditStudentDialog ref="editStudentDialog" />
-
-                  <v-icon
-                    @click="deleteStudent((studentId = student.id))"
-                    icon="fa fa-trash pl-5 mt-2"
-                  />
+                  <v-icon @click="deleteStudent((studentId = student.id))" icon="fa fa-trash pl-5 mt-2" />
                 </tr>
               </tbody>
             </v-table>
@@ -62,17 +52,7 @@
                       <div class="links text-left">{{ teacher.name }}</div>
                     </h3>
                   </td>
-                  <v-icon
-                    @click="openTeacherEdit(index)"
-                    icon="fa fa-edit pl-5 mt-2 mr-4"
-                  />
-
-                  <EditTeacherDialog ref="editTeacherDialog" />
-
-                  <v-icon
-                    @click="deleteTeacher((teacherId = teacher.id))"
-                    icon="fa fa-trash pl-5 mt-2"
-                  />
+                  <v-icon @click="deleteTeacher((teacherId = teacher.id))" icon="fa fa-trash pl-5 mt-2" />
                 </tr>
               </tbody>
             </v-table>
@@ -86,16 +66,12 @@
 
 <script>
 import AddStudentDialog from "../assets/students/AddStudent.vue";
-import EditStudentDialog from "../assets/students/EditStudentDialog.vue";
 import AddTeacherDialog from "../assets/teachers/AddTeacherDialog.vue";
-import EditTeacherDialog from "../assets/teachers/EditTeacherDialog.vue";
 
 export default {
   components: {
     AddStudentDialog,
-    EditStudentDialog,
     AddTeacherDialog,
-    EditTeacherDialog,
   },
   computed: {
     students() {
@@ -106,23 +82,11 @@ export default {
     },
   },
   methods: {
-    openStudentEdit(index) {
-      this.$refs.editStudentDialog[index].open();
-    },
-    editStudentName(index, name) {
-      this.$store.dispatch("editStudentName", { index, name });
-    },
     deleteStudent(studentId) {
       this.$store.dispatch("deleteStudent", studentId);
     },
     clearEdit() {
       this.studentName = "";
-    },
-    openTeacherEdit(index) {
-      this.$refs.editTeacherDialog[index].open();
-    },
-    editTeacherName(index, name) {
-      this.$store.dispatch("editTeacherName", { index, name });
     },
     deleteTeacher(teacherId) {
       this.$store.dispatch("deleteTeacher", teacherId);

@@ -1,8 +1,7 @@
 <template>
   <h1 class="text-center">
-    Strona szkoły<!--{{ $store.getters.getSchool }}-->
+    Strona szkoły {{ school.name }}
   </h1>
-  <!--{{ $route.params.id }}-->
   <AddStudentDialog />
 
   <AddTeacherDialog />
@@ -80,6 +79,9 @@ export default {
     teachers() {
       return this.$store.getters.getTeachers;
     },
+    school() {
+      return this.$store.getters.getSchool
+    }
   },
   methods: {
     deleteStudent(studentId) {
@@ -94,8 +96,20 @@ export default {
     clearEdit() {
       this.teacherName = "";
     },
+    getSchool() {
+      const schoolId = this.$route.params.id
+      this.$store.commit("setSchoolId", schoolId)
+      this.$store.dispatch("findSchool", schoolId)
+    },
+    listStudents() {
+      const schoolId = this.$route.params.id
+      const params = { schoolId: schoolId }
+      this.$store.commit("setStudentsParams", params)
+      this.$store.dispatch("listAllStudents")
+    }
   },
   created() {
+    this.getSchool
     //  this.$store.dispatch("addStudentPost");
     this.$store.dispatch("listAllStudents");
     this.$store.dispatch("listAllTeachers");

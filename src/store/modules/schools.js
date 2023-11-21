@@ -1,8 +1,11 @@
 import axios from "axios";
+
+const SCHOOL_URL = "schools";
+
 export default {
   state: {
-    alertMessageName: "",
-    showAlertName: false,
+    schoolAlert: "",
+    showSchoolAlert: false,
     school: {
       name: "",
       city: "",
@@ -10,14 +13,18 @@ export default {
     schools: [],
   },
   getters: {
-    getShowAlertName: (state) => state.showAlertName,
-    getAlertMessageName: (state) => state.alertMessageName,
+    getShowSchoolAlert: (state) => state.showSchoolAlert,
+    getSchoolAlert: (state) => state.schoolAlert,
     getSchools: (state) => state.schools,
     getSchool: (state) => state.school,
+    getSchoolId: (state) => state.school.id,
   },
   mutations: {
     setSchools(state, data) {
       state.schools = data;
+    },
+    setSchoolId(state, data) {
+      state.school.id = data;
     },
     setSchool(state, data) {
       state.school = data;
@@ -28,23 +35,32 @@ export default {
         city: "",
       };
     },
-    setAlertMessageName(state, data) {
-      state.alertMessageName = data;
+    setSchoolAlert(state, data) {
+      state.schoolAlert = data;
     },
-    setShowAlertName(state, data) {
-      state.showAlertName = data;
+    setShowSchoolAlert(state, data) {
+      state.showSchoolAlert = data;
     },
   },
   actions: {
-    listAllSchools({ commit }, selectedCity) {
+    findSchool({ commit }, id) {
       axios
-        .get("http://api.oskmanager.pl/api/schools")
+        .get(`${SCHOOL_URL}/${id}`)
+        .then((response) => {
+          const school = response.data;
+          commit("setSchool", school);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    listAllSchools({ commit }) {
+      axios
+        .get(`${SCHOOL_URL}`)
         .then((response) => {
           const listSchools = response.data.map((school) => {
-            console.log(selectedCity);
-            //            console.log(school.location.city.name);
             return {
-              id: school.location.id,
+              id: school.id,
               name: school.name,
               city: school.location.city.name,
             };
@@ -67,20 +83,20 @@ export default {
         },
       };
       axios
-        .post("http://api.oskmanager.pl/api/schools", schoolData)
+        .post(`${SCHOOL_URL}`, schoolData)
         .then((response) => {
-          dispatch("listAllSchools", selectedCity);
+          dispatch("listAllSchools");
         })
         .catch((error) => {
           {
-            dispatch("showAlertName", error.response.data.message);
+            dispatch("showSchoolAlert", error.response.data.message);
           }
           console.log(error);
         });
     },
-    deleteSchool({ dispatch }, schoolId) {
+    deleteSchool({ dispatch }, id) {
       axios
-        .delete(`http://api.oskmanager.pl/api/schools/${schoolId - 2}`)
+        .delete(`${SCHOOL_URL}/${id}`)
         .then((response) => {
           dispatch("listAllSchools");
         })
@@ -88,9 +104,9 @@ export default {
           console.log(error);
         });
     },
-    showAlertName(state, message) {
-      state.commit("setAlertMessageName", message);
-      state.commit("setShowAlertName", true);
+    showSchoolAlert(state, message) {
+      state.commit("setSchoolAlert", message);
+      state.commit("setShowSchoolAlert", true);
     },
   },
 };

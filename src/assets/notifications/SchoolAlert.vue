@@ -1,23 +1,17 @@
 <template>
-  <v-snackbar
-    v-model="showAlertName"
-    class="text-center"
-    timeout="3000"
-    color="red"
-    top
-  >
-    {{ alertMessage }}
+  <v-snackbar v-model="showSchoolAlert" class="text-center" timeout="3000" color="red" top>
+    {{ schoolAlert }}
   </v-snackbar>
 </template>
 
 <script>
 export default {
   computed: {
-    showAlertName() {
-      return this.$store.getters.getShowAlertName;
+    showSchoolAlert() {
+      return this.$store.getters.getShowSchoolAlert;
     },
-    alertMessage() {
-      return this.$store.getters.getAlertMessageName;
+    schoolAlert() {
+      return this.$store.getters.getSchoolAlert;
     },
   },
 };

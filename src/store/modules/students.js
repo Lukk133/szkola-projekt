@@ -1,4 +1,6 @@
 import axios from "axios";
+//to do wywalenia =><
+const STUDENT_URL = "students";
 
 export default {
   state: {
@@ -8,11 +10,15 @@ export default {
       name: "",
     },
     selectedSchoolId: 279,
+    params: {
+      shcoolId: 0,
+    },
   },
   getters: {
     getStudent: (state) => state.student,
     getStudents: (state) => state.students,
     getStudentNumber: (state) => state.studentNumber + 1,
+    getStudentsParams: (state) => state.params,
   },
   mutations: {
     setStudent(state, data) {
@@ -28,13 +34,25 @@ export default {
       };
     },
     setSelectedSchool(state, schoolId) {
-      state.selectedSchoolId = schoolId - 1;
+      state.selectedSchoolId = schoolId;
+    },
+    setStudentParams(state, data) {
+      state.params = data;
     },
   },
   actions: {
-    listAllStudents({ commit }) {
+    listAllStudents({ commit, getters }) {
+      const params = getters.getStudentsParams;
+      params.size = 5;
+      params.page = 0;
+      let query = "";
+      for (let index in Object.keys(params)) {
+        let key = Object.keys(params)[index];
+        query += `${key}=${params[key]}&`;
+      }
+      console.log(params);
       axios
-        .get("http://api.oskmanager.pl/api/students?size=20")
+        .get(`${STUDENT_URL}?${query}`)
         .then((response) => {
           const listStudents = response.data.content.map((student) => {
             return {
@@ -49,20 +67,20 @@ export default {
           console.log(error);
         });
     },
-    addStudent({ dispatch, getters, state }) {
-      //  console.log(state.selectedSchoolId);
+    addStudent({ dispatch, getters }) {
+      const student = getters.getStudent;
       const studentData = {
-        email: getters.getStudent.email,
-        schoolId: state.selectedSchoolId - 1,
+        email: student.email,
+        schoolId: student.schoolId,
+        name: student.name,
+        lastName: "",
         password: "Password123!",
         pesel: "12345678901",
         pkk: "PKK12345",
-        name: getters.getStudent.name,
-        lastName: "",
         phoneNumber: "+48123456789",
       };
       axios
-        .post("http://api.oskmanager.pl/api/students", studentData)
+        .post(`${STUDENT_URL}`, studentData)
         .then((response) => {
           dispatch("listAllStudents");
         })
@@ -72,7 +90,7 @@ export default {
     },
     deleteStudent({ dispatch }, studentId) {
       axios
-        .delete(`http://api.oskmanager.pl/api/students/${studentId}`)
+        .delete(`${STUDENT_URL}/${studentId}`)
         .then((response) => {
           dispatch("listAllStudents");
         })

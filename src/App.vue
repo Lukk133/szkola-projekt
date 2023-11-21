@@ -1,20 +1,26 @@
 <template>
   <nav>
-   <!-- <router-link :to="{name: 'SchoolList'}">Lista szkół</router-link>-->
-<router-link :to="{name: 'LoginPage'}"></router-link>
+    <AlertSnackbar />
+    <!-- <router-link :to="{name: 'SchoolList'}">Lista szkół</router-link>-->
+    <router-link :to="{ name: 'LoginPage' }"></router-link>
 
   </nav>
-  <router-view/>
+  <router-view />
 </template>
 
 <script>
+import AlertSnackbar from './assets/notifications/AlertSnackbar.vue';
+
 
 export default {
+  components: {
+    AlertSnackbar
+  },
   name: 'App',
-
   data: () => ({
     //
   }),
+  components: { AlertSnackbar }
 }
 </script>
 

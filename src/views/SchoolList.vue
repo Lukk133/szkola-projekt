@@ -14,7 +14,7 @@
       <tr v-for="(school, index) in schools" :key="school.name">
         <td>{{ school.id }}</td>
         <td>
-          <h2 @click="goToSchoolPage(school.id)">
+          <h2 style="cursor: pointer;" @click="goToSchoolPage(school.id)">
             {{ school.name }}
           </h2>
           <!--<RouterLink :to="{ name: 'SchoolPage', params: { id: school.id } }">   </RouterLink> -->
@@ -52,7 +52,6 @@ export default {
     goToSchoolPage(schoolId) {
       this.$router.push({ name: "SchoolPage", params: { id: schoolId } });
       this.$store.commit("setSelectedSchool", schoolId);
-      this.$store.commit("setSelectedSchool", schoolId);
     },
     deleteSchool(schoolId) {
       this.$store.dispatch("deleteSchool", schoolId);
@@ -77,5 +76,6 @@ export default {
 <style>
 a {
   color: black;
+  cursor: pointer;
 }
 </style>

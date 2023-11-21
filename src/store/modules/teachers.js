@@ -1,4 +1,7 @@
 import axios from "axios";
+
+const INSTRUCTOR_URL = "instructors";
+
 export default {
   state: {
     indexTeacherNumber: "",
@@ -33,7 +36,7 @@ export default {
   actions: {
     listAllTeachers({ commit }) {
       axios
-        .get("http://api.oskmanager.pl/api/instructors?size=20")
+        .get(`${INSTRUCTOR_URL}?size=20`)
         .then((response) => {
           const listTeachers = response.data.content.map((teacher) => {
             return {
@@ -61,7 +64,7 @@ export default {
         courseTypeId: 1,
       };
       axios
-        .post("http://api.oskmanager.pl/api/instructors", teacherData)
+        .post(`${INSTRUCTOR_URL}`, teacherData)
         .then((response) => {
           dispatch("listAllTeachers");
         })
@@ -71,7 +74,7 @@ export default {
     },
     deleteTeacher({ dispatch }, teacherId) {
       axios
-        .delete(`http://api.oskmanager.pl/api/instructors/${teacherId}`)
+        .delete(`${INSTRUCTOR_URL}/${teacherId}`)
         .then((response) => {
           dispatch("listAllTeachers");
         })

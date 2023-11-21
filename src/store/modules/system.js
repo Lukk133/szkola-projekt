@@ -1,5 +1,7 @@
 export default {
   state: {
+    nazwa1: "Nazwa 1",
+    nazwa2: "Nazwa 2",
     showAlert: false,
     visible: false,
     isLogged: true,

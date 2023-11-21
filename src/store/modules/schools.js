@@ -4,17 +4,15 @@ const SCHOOL_URL = "schools";
 
 export default {
   state: {
-    schoolAlert: "",
-    showSchoolAlert: false,
+    indexSchoolNumber: "",
     school: {
+      id: 0,
       name: "",
       city: "",
     },
     schools: [],
   },
   getters: {
-    getShowSchoolAlert: (state) => state.showSchoolAlert,
-    getSchoolAlert: (state) => state.schoolAlert,
     getSchools: (state) => state.schools,
     getSchool: (state) => state.school,
     getSchoolId: (state) => state.school.id,
@@ -34,12 +32,6 @@ export default {
         name: "",
         city: "",
       };
-    },
-    setSchoolAlert(state, data) {
-      state.schoolAlert = data;
-    },
-    setShowSchoolAlert(state, data) {
-      state.showSchoolAlert = data;
     },
   },
   actions: {
@@ -89,7 +81,7 @@ export default {
         })
         .catch((error) => {
           {
-            dispatch("showSchoolAlert", error.response.data.message);
+            dispatch("showAlert", error.response.data.message);
           }
           console.log(error);
         });
@@ -99,14 +91,15 @@ export default {
         .delete(`${SCHOOL_URL}/${id}`)
         .then((response) => {
           dispatch("listAllSchools");
+          dispatch("showAlert", "Usunięto pomyślnie");
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    showSchoolAlert(state, message) {
-      state.commit("setSchoolAlert", message);
-      state.commit("setShowSchoolAlert", true);
+    showAlertName(state, message) {
+      state.commit("setAlertMessageName", message);
+      state.commit("setShowAlertName", true);
     },
   },
 };

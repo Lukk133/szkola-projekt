@@ -1,6 +1,5 @@
 <template>
   <DialogSchool />
-
   <v-table class="mx-4">
     <thead>
       <tr>
@@ -12,29 +11,27 @@
 
     <tbody>
       <tr v-for="(school, index) in schools" :key="school.name">
-        <td>{{ school.id }}</td>
+        <td>{{ index + 1 }}</td>
         <td>
-          <h2 style="cursor: pointer;" @click="goToSchoolPage(school.id)">
+          <h2 style="cursor: pointer" @click="goToSchoolPage(school.id)">
             {{ school.name }}
           </h2>
-          <!--<RouterLink :to="{ name: 'SchoolPage', params: { id: school.id } }">   </RouterLink> -->
         </td>
-        <td>{{ school.city }}</td>
-        <v-icon @click="deleteSchool((schoolId = school.id))" icon="fa fa-trash pl-5 mt-2" />
+        <td>Stary York</td>
+        <!--{{ school.city }}-->
+
+        <v-icon @click="deleteSchool(school.id)" icon="fa fa-trash pl-5 mt-2" />
       </tr>
     </tbody>
   </v-table>
-  <SchoolAlert />
 </template>
 
 <script>
 import DialogSchool from "../assets/schools/AddSchoolDialog.vue";
-import SchoolAlert from "../assets/notifications/SchoolAlert.vue";
 
 export default {
   components: {
     DialogSchool,
-    SchoolAlert,
   },
   name: "HelloWorld",
   data() {
@@ -54,6 +51,7 @@ export default {
       this.$store.commit("setSelectedSchool", schoolId);
     },
     deleteSchool(schoolId) {
+      console.log(schoolId);
       this.$store.dispatch("deleteSchool", schoolId);
     },
     clearEdit() {
@@ -62,8 +60,8 @@ export default {
   },
   created() {
     this.$store.dispatch("listAllSchools"),
-      this.$store.dispatch("listAllStudents");
-    this.$store.dispatch("listAllTeachers");
+      this.$store.dispatch("listStudents");
+    this.$store.dispatch("listTeachers");
   },
   //beforeCreate() {
   //if (this.$store.state.isLogged === false) {
@@ -76,6 +74,5 @@ export default {
 <style>
 a {
   color: black;
-  cursor: pointer;
 }
 </style>

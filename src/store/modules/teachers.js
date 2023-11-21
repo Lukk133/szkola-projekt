@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const INSTRUCTOR_URL = "instructors";
+const STUDENT_URL = "instructors";
 
 export default {
   state: {
@@ -10,11 +10,15 @@ export default {
       name: "",
     },
     selectedSchoolId: 279,
+    params: {
+      schoolId: 0,
+    },
   },
   getters: {
-    getTeachers: (state) => state.teachers,
     getTeacher: (state) => state.teacher,
+    getTeachers: (state) => state.teachers,
     getTeacherNumber: (state) => state.teacherNumber + 1,
+    getTeachersParams: (state) => state.params,
   },
   mutations: {
     setTeacher(state, data) {
@@ -30,13 +34,26 @@ export default {
       };
     },
     setSelectedSchool(state, schoolId) {
-      state.selectedSchoolId = schoolId - 1;
+      //   console.log(schoolId);
+      state.selectedSchoolId = schoolId;
+    },
+    setTeachersParams(state, data) {
+      state.params = data;
     },
   },
   actions: {
-    listAllTeachers({ commit }) {
+    listTeachers({ commit, getters }) {
+      var params = getters.getTeachersParams;
+      params.size = 5;
+      params.page = 0;
+      let query = "";
+      for (let index in Object.keys(params)) {
+        let key = Object.keys(params)[index];
+        query += `${key}=${params[key]}&`;
+      }
+      //  console.log(params);
       axios
-        .get(`${INSTRUCTOR_URL}?size=20`)
+        .get(`${STUDENT_URL}?${query}`)
         .then((response) => {
           const listTeachers = response.data.content.map((teacher) => {
             return {
@@ -51,32 +68,42 @@ export default {
           console.log(error);
         });
     },
-    addTeacher({ dispatch, getters, state }) {
+    addTeacher({ dispatch, getters }) {
+      const teacher = getters.getTeacher;
+      //  console.log(teacher.schoolId);
       const teacherData = {
-        name: getters.getTeacher.name,
-        email: getters.getTeacher.email,
-        schoolId: state.selectedSchoolId - 1,
-        lastName: "",
+        email: teacher.email,
+        schoolId: getters.getTeachersParams.schoolId,
+        courseTypeId: 1,
         password: "Password123!",
         pesel: "12345678901",
         pkk: "PKK12345",
+        name: teacher.name,
+        lastName: "",
         phoneNumber: "+48123456789",
-        courseTypeId: 1,
       };
-      axios
-        .post(`${INSTRUCTOR_URL}`, teacherData)
-        .then((response) => {
-          dispatch("listAllTeachers");
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      const existingTeacher = getters.getTeachers.find(
+        (existingTeacher) => existingTeacher.name === teacher.name
+      );
+      if (existingTeacher) {
+        dispatch("showAlert", "Instruktor o takich danych już istnieje");
+      } else {
+        axios
+          .post(`${STUDENT_URL}`, teacherData)
+          .then((response) => {
+            dispatch("listTeachers");
+          })
+          .catch((error) => {
+            console.log(error);
+            dispatch("showAlert", error.response.data.message);
+          });
+      }
     },
     deleteTeacher({ dispatch }, teacherId) {
       axios
-        .delete(`${INSTRUCTOR_URL}/${teacherId}`)
+        .delete(`${STUDENT_URL}/${teacherId}`)
         .then((response) => {
-          dispatch("listAllTeachers");
+          dispatch("listTeachers");
         })
         .catch((error) => {
           console.log(error);

@@ -1,6 +1,7 @@
 <template>
   <h1 class="text-center">
-    Strona szkoły {{ school.name }}
+    Strona szkoły
+    {{ school.name }}
   </h1>
   <AddStudentDialog />
 
@@ -20,13 +21,17 @@
               </thead>
               <tbody>
                 <tr v-for="(student, index) in students" :key="student.name">
-                  <td>{{ student.id }}</td>
+                  <td>{{ index + 1 }}</td>
                   <td>
                     <h3>
                       <div class="links text-left">{{ student.name }}</div>
                     </h3>
                   </td>
-                  <v-icon @click="deleteStudent((studentId = student.id))" icon="fa fa-trash pl-5 mt-2" />
+
+                  <v-icon
+                    @click="deleteStudent((studentId = student.id))"
+                    icon="fa fa-trash pl-5 mt-2"
+                  />
                 </tr>
               </tbody>
             </v-table>
@@ -45,13 +50,17 @@
               </thead>
               <tbody>
                 <tr v-for="(teacher, index) in teachers" :key="teacher.name">
-                  <td>{{ teacher.id }}</td>
+                  <td>{{ index + 1 }}</td>
                   <td>
                     <h3>
                       <div class="links text-left">{{ teacher.name }}</div>
                     </h3>
                   </td>
-                  <v-icon @click="deleteTeacher((teacherId = teacher.id))" icon="fa fa-trash pl-5 mt-2" />
+
+                  <v-icon
+                    @click="deleteTeacher((teacherId = teacher.id))"
+                    icon="fa fa-trash pl-5 mt-2"
+                  />
                 </tr>
               </tbody>
             </v-table>
@@ -76,19 +85,26 @@ export default {
     students() {
       return this.$store.getters.getStudents;
     },
+    school() {
+      return this.$store.getters.getSchool;
+    },
     teachers() {
       return this.$store.getters.getTeachers;
     },
-    school() {
-      return this.$store.getters.getSchool
-    }
   },
   methods: {
     deleteStudent(studentId) {
       this.$store.dispatch("deleteStudent", studentId);
+      this.$store.dispatch("showAlert", "Usunięto pomyślnie");
     },
     clearEdit() {
       this.studentName = "";
+    },
+    openTeacherEdit(index) {
+      this.$refs.editTeacherDialog[index].open();
+    },
+    editTeacherName(index, name) {
+      this.$store.dispatch("editTeacherName", { index, name });
     },
     deleteTeacher(teacherId) {
       this.$store.dispatch("deleteTeacher", teacherId);
@@ -97,28 +113,34 @@ export default {
       this.teacherName = "";
     },
     getSchool() {
-      const schoolId = this.$route.params.id
-      this.$store.commit("setSchoolId", schoolId)
-      this.$store.dispatch("findSchool", schoolId)
+      var schoolId = this.$route.params.id;
+      this.$store.commit("setSchoolId", schoolId);
+      this.$store.dispatch("findSchool", schoolId);
     },
     listStudents() {
-      const schoolId = this.$route.params.id
-      const params = { schoolId: schoolId }
-      this.$store.commit("setStudentsParams", params)
-      this.$store.dispatch("listAllStudents")
-    }
+      var schoolId = this.$route.params.id;
+      var params = { schoolId: schoolId };
+      this.$store.commit("setStudentsParams", params);
+      this.$store.dispatch("listStudents");
+    },
+    listTeachers() {
+      const schoolId = this.$route.params.id;
+      let params = { schoolId: schoolId };
+      this.$store.commit("setTeachersParams", params);
+      this.$store.dispatch("listTeachers");
+      console.log(schoolId);
+    },
   },
   created() {
-    this.getSchool
-    //  this.$store.dispatch("addStudentPost");
-    this.$store.dispatch("listAllStudents");
-    this.$store.dispatch("listAllTeachers");
+    this.getSchool();
+    this.listStudents();
+    this.listTeachers();
   },
   /* beforeCreate() {
-    if ((this.$store.state.isLogged = false)) {
-      this.$router.push("/");
-    }
-  },*/
+      if ((this.$store.state.isLogged = false)) {
+        this.$router.push("/");
+      }
+    },*/
 };
 </script>
 

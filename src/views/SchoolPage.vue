@@ -21,7 +21,11 @@
               </thead>
               <tbody>
                 <tr v-for="(student, index) in students" :key="student.name">
-                  <td>{{ index + 1 }}</td>
+                  <td>
+                    {{
+                      index + 5 * ($store.getters.getStudentsPagination - 1) + 1
+                    }}
+                  </td>
                   <td>
                     <h3>
                       <div class="links text-left">{{ student.name }}</div>
@@ -35,6 +39,11 @@
                 </tr>
               </tbody>
             </v-table>
+            <v-pagination
+              @click="listStudents()"
+              v-model="studentPagination"
+              :length="4"
+            ></v-pagination>
           </div>
         </v-sheet>
       </v-col>
@@ -50,13 +59,16 @@
               </thead>
               <tbody>
                 <tr v-for="(teacher, index) in teachers" :key="teacher.name">
-                  <td>{{ index + 1 }}</td>
+                  <td>
+                    {{
+                      index + 5 * ($store.getters.getTeachersPagination - 1) + 1
+                    }}
+                  </td>
                   <td>
                     <h3>
                       <div class="links text-left">{{ teacher.name }}</div>
                     </h3>
                   </td>
-
                   <v-icon
                     @click="deleteTeacher((teacherId = teacher.id))"
                     icon="fa fa-trash pl-5 mt-2"
@@ -64,6 +76,11 @@
                 </tr>
               </tbody>
             </v-table>
+            <v-pagination
+              @click="listTeachers()"
+              v-model="teacherPagination"
+              :length="4"
+            ></v-pagination>
           </div>
         </v-sheet>
       </v-col>
@@ -92,10 +109,15 @@ export default {
       return this.$store.getters.getTeachers;
     },
   },
+  data() {
+    return {
+      studentPagination: 1,
+      teacherPagination: 1,
+    };
+  },
   methods: {
     deleteStudent(studentId) {
       this.$store.dispatch("deleteStudent", studentId);
-      this.$store.dispatch("showAlert", "Usunięto pomyślnie");
     },
     clearEdit() {
       this.studentName = "";
@@ -121,12 +143,14 @@ export default {
       var schoolId = this.$route.params.id;
       var params = { schoolId: schoolId };
       this.$store.commit("setStudentsParams", params);
+      this.$store.commit("setStudentPagination", this.studentPagination);
       this.$store.dispatch("listStudents");
     },
     listTeachers() {
       const schoolId = this.$route.params.id;
       let params = { schoolId: schoolId };
       this.$store.commit("setTeachersParams", params);
+      this.$store.commit("setTeachersPagination", this.teacherPagination);
       this.$store.dispatch("listTeachers");
       console.log(schoolId);
     },

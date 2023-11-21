@@ -13,12 +13,14 @@ export default {
     params: {
       schoolId: 0,
     },
+    teacherPagination: 0,
   },
   getters: {
     getTeacher: (state) => state.teacher,
     getTeachers: (state) => state.teachers,
     getTeacherNumber: (state) => state.teacherNumber + 1,
     getTeachersParams: (state) => state.params,
+    getTeachersPagination: (state) => state.teacherPagination,
   },
   mutations: {
     setTeacher(state, data) {
@@ -40,12 +42,15 @@ export default {
     setTeachersParams(state, data) {
       state.params = data;
     },
+    setTeachersPagination(state, data) {
+      state.teacherPagination = data;
+    },
   },
   actions: {
     listTeachers({ commit, getters }) {
       var params = getters.getTeachersParams;
       params.size = 5;
-      params.page = 0;
+      params.page = getters.getTeachersPagination - 1;
       let query = "";
       for (let index in Object.keys(params)) {
         let key = Object.keys(params)[index];
@@ -104,6 +109,7 @@ export default {
         .delete(`${STUDENT_URL}/${teacherId}`)
         .then((response) => {
           dispatch("listTeachers");
+          dispatch("showAlert", "Usunięto pomyślnie");
         })
         .catch((error) => {
           console.log(error);

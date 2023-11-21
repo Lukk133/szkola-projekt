@@ -76,9 +76,6 @@ export default {
     listCities() {
       this.$store.dispatch("listCities");
     },
-    updateMessage(event) {
-      this.$store.commit("updateMessage", event.target.value);
-    },
   },
 };
 </script>

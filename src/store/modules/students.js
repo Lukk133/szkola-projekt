@@ -13,12 +13,14 @@ export default {
     params: {
       schoolId: 0,
     },
+    studentPagination: 0,
   },
   getters: {
     getStudent: (state) => state.student,
     getStudents: (state) => state.students,
     getStudentNumber: (state) => state.studentNumber + 1,
     getStudentsParams: (state) => state.params,
+    getStudentsPagination: (state) => state.studentPagination,
   },
   mutations: {
     setStudent(state, data) {
@@ -36,22 +38,23 @@ export default {
     setSelectedSchool(state, schoolId) {
       state.selectedSchoolId = schoolId;
     },
-
     setStudentsParams(state, data) {
       state.params = data;
+    },
+    setStudentPagination(state, data) {
+      state.studentPagination = data;
     },
   },
   actions: {
     listStudents({ commit, getters }) {
       var params = getters.getStudentsParams;
       params.size = 5;
-      params.page = 0;
+      params.page = getters.getStudentsPagination - 1;
       let query = "";
       for (let index in Object.keys(params)) {
         let key = Object.keys(params)[index];
         query += `${key}=${params[key]}&`;
       }
-      //  console.log(params);
       axios
         .get(`${STUDENT_URL}?${query}`)
         .then((response) => {
@@ -102,6 +105,7 @@ export default {
         .delete(`${STUDENT_URL}/${studentId}`)
         .then((response) => {
           dispatch("listStudents");
+          dispatch("showAlert", "Usunięto pomyślnie");
         })
         .catch((error) => {
           console.log(error);

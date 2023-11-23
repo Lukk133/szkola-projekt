@@ -2,7 +2,6 @@
     <div>
         <v-card class="mx-auto pa-12 pb-8 logo" elevation="8" max-width="448" rounded="lg">
             <div class="text-subtitle-1 text-medium-emphasis">Wpisz login</div>
-            <!-- prepend-inner-icon="mdi-email-outline"-->
             <v-text-field v-model="userLogin" density="compact" placeholder="Login" variant="outlined"></v-text-field>
 
             <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">

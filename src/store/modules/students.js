@@ -4,7 +4,6 @@ const STUDENT_URL = "students";
 
 export default {
   state: {
-    indexStudentNumber: "",
     students: [],
     student: {
       name: "",
@@ -13,14 +12,19 @@ export default {
     params: {
       schoolId: 0,
     },
+    /*
     studentPagination: 0,
+    totalStudents: 0,
+    studentsDisplayed: 5,
+    */
   },
   getters: {
     getStudent: (state) => state.student,
     getStudents: (state) => state.students,
-    getStudentNumber: (state) => state.studentNumber + 1,
     getStudentsParams: (state) => state.params,
     getStudentsPagination: (state) => state.studentPagination,
+    getTotalStudents: (state) => state.totalStudents,
+    getStudentsDisplayed: (state) => state.studentsDisplayed,
   },
   mutations: {
     setStudent(state, data) {
@@ -28,6 +32,12 @@ export default {
     },
     setStudents(state, data) {
       state.students = data;
+    },
+    setTotalStudents(state, data) {
+      state.totalStudents = data;
+    },
+    setStudentsDisplayed(state, data) {
+      state.studentsDisplayed = data;
     },
     initStudent(state) {
       state.student = {
@@ -48,7 +58,11 @@ export default {
   actions: {
     listStudents({ commit, getters }) {
       var params = getters.getStudentsParams;
-      params.size = 5;
+      if (getters.getStudentsDisplayed === "Wszystkich") {
+        params.size = 1000;
+      } else {
+        params.size = getters.getStudentsDisplayed;
+      }
       params.page = getters.getStudentsPagination - 1;
       let query = "";
       for (let index in Object.keys(params)) {
@@ -58,6 +72,7 @@ export default {
       axios
         .get(`${STUDENT_URL}?${query}`)
         .then((response) => {
+          console.log(response.data.totalElements);
           const listStudents = response.data.content.map((student) => {
             return {
               id: student.id,
@@ -66,6 +81,7 @@ export default {
             };
           });
           commit("setStudents", listStudents);
+          commit("setTotalStudents", response.data.totalElements);
         })
         .catch((error) => {
           console.log(error);
@@ -76,10 +92,10 @@ export default {
       const studentData = {
         email: student.email,
         schoolId: student.schoolId,
+        name: student.name,
         password: "Password123!",
         pesel: "12345678901",
         pkk: "PKK12345",
-        name: student.name,
         lastName: "",
         phoneNumber: "+48123456789",
       };

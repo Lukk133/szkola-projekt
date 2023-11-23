@@ -4,7 +4,6 @@ const SCHOOL_URL = "schools";
 
 export default {
   state: {
-    indexSchoolNumber: "",
     school: {
       id: 0,
       name: "",
@@ -58,6 +57,7 @@ export default {
             };
           });
           commit("setSchools", listSchools);
+          console.log(listSchools);
         })
         .catch((error) => {
           console.log(error);

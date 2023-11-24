@@ -63,7 +63,8 @@ export default {
                 );
             } else {
                 this.$store.state.isLogged = true;
-                this.$router.push(`/SchoolList`);
+                this.$store.commit("setLoggedUser", { name: this.userLogin, password: this.userPassword })
+                this.$router.push(`/`);
             }
         },
     },

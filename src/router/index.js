@@ -2,15 +2,16 @@ import { createRouter, createWebHistory } from "vue-router";
 import SchoolList from "../views/SchoolList.vue";
 import SchoolPage from "../views/SchoolPage.vue";
 import LoginPage from "../views/Login.vue";
+import Profile from "../views/Profile.vue";
 
 const routes = [
   {
-    path: "/SchoolList",
+    path: "/",
     name: "SchoolList",
     component: SchoolList,
   },
   {
-    path: "/",
+    path: "/LoginPage",
     name: "LoginPage",
     component: LoginPage,
   },
@@ -19,6 +20,11 @@ const routes = [
     name: "SchoolPage",
     component: SchoolPage,
     props: true,
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: Profile,
   },
 ];
 

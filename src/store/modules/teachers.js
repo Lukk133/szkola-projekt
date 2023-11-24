@@ -8,7 +8,7 @@ export default {
     teacher: {
       name: "",
     },
-    selectedSchoolId: 279,
+    selectedSchoolId: "",
     params: {
       schoolId: 0,
     },
@@ -25,6 +25,7 @@ export default {
     getTeachersPagination: (state) => state.teacherPagination,
     getTotalTeachers: (state) => state.totalTeachers,
     getTeachersDisplayed: (state) => state.teachersDisplayed,
+    getSelectedSchool: (state) => state.selectedSchoolId,
   },
   mutations: {
     setTeacher(state, data) {
@@ -69,7 +70,6 @@ export default {
         let key = Object.keys(params)[index];
         query += `${key}=${params[key]}&`;
       }
-      //  console.log(params);
       axios
         .get(`${STUDENT_URL}?${query}`)
         .then((response) => {
@@ -89,7 +89,6 @@ export default {
     },
     addTeacher({ dispatch, getters }) {
       const teacher = getters.getTeacher;
-      //  console.log(teacher.schoolId);
       const teacherData = {
         email: teacher.email,
         schoolId: getters.getTeachersParams.schoolId,

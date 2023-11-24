@@ -57,7 +57,6 @@ export default {
             };
           });
           commit("setSchools", listSchools);
-          console.log(listSchools);
         })
         .catch((error) => {
           console.log(error);

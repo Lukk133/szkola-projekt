@@ -8,7 +8,7 @@ export default {
     student: {
       name: "",
     },
-    selectedSchoolId: 279,
+    selectedSchoolId: "",
     params: {
       schoolId: 0,
     },
@@ -58,6 +58,7 @@ export default {
   actions: {
     listStudents({ commit, getters }) {
       var params = getters.getStudentsParams;
+      console.log(params);
       if (getters.getStudentsDisplayed === "Wszystkich") {
         params.size = 1000;
       } else {
@@ -72,7 +73,6 @@ export default {
       axios
         .get(`${STUDENT_URL}?${query}`)
         .then((response) => {
-          console.log(response.data.totalElements);
           const listStudents = response.data.content.map((student) => {
             return {
               id: student.id,
@@ -123,6 +123,19 @@ export default {
           dispatch("listStudents");
           dispatch("showAlert", "Usunięto pomyślnie");
         })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    addStudentLogin({ dispatch, getters }) {
+      const studentLogin = {
+        email: "qwert@y",
+        password: "Password123!",
+        code: "XXXXXX",
+      };
+      axios
+        .post(`${STUDENT_URL}/login`, studentLogin)
+        .then((response) => {})
         .catch((error) => {
           console.log(error);
         });

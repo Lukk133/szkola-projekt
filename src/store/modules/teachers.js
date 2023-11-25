@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const STUDENT_URL = "instructors";
+const INSTRUCTOR_URL = "instructors";
 
 export default {
   state: {
@@ -71,7 +71,7 @@ export default {
         query += `${key}=${params[key]}&`;
       }
       axios
-        .get(`${STUDENT_URL}?${query}`)
+        .get(`${INSTRUCTOR_URL}?${query}`)
         .then((response) => {
           const listTeachers = response.data.content.map((teacher) => {
             return {
@@ -107,7 +107,7 @@ export default {
         dispatch("showAlert", "Instruktor o takich danych już istnieje");
       } else {
         axios
-          .post(`${STUDENT_URL}`, teacherData)
+          .post(`${INSTRUCTOR_URL}`, teacherData)
           .then((response) => {
             dispatch("listTeachers");
           })
@@ -119,7 +119,7 @@ export default {
     },
     deleteTeacher({ dispatch }, teacherId) {
       axios
-        .delete(`${STUDENT_URL}/${teacherId}`)
+        .delete(`${INSTRUCTOR_URL}/${teacherId}`)
         .then((response) => {
           dispatch("listTeachers");
           dispatch("showAlert", "Usunięto pomyślnie");

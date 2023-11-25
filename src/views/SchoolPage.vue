@@ -33,7 +33,8 @@
                                 </td>
                                 <td>
                                     <h3>
-                                        <div @click="goToProfile" class="links text-left">{{ student.name }}</div>
+                                        <div class="links text-left">{{
+                                            student.name }}</div>
                                     </h3>
                                 </td>
 
@@ -70,7 +71,8 @@
                                 </td>
                                 <td>
                                     <h3>
-                                        <div class="links text-left">{{ teacher.name }}</div>
+                                        <div class="links text-left">{{ teacher.name }}
+                                        </div>
                                     </h3>
                                 </td>
                                 <v-icon @click="deleteTeacher((teacherId = teacher.id))" icon="fa fa-trash pl-5 mt-2" />
@@ -86,7 +88,6 @@
             <v-responsive width="100%"></v-responsive>
         </v-row>
     </v-container>
-    <v-btn @click="setUrlParams">Add params to url</v-btn>
 </template>
 
 <script>
@@ -130,9 +131,16 @@ export default {
         };
     },
     methods: {
-        goToProfile() {
-            this.$router.push("profile")
-        },
+        /* goToProfile(name) {
+             console.log(name);
+             console.log(this.$store.getters.getLoggedUser.name);
+             if (this.$store.getters.getLoggedUser.name === "") {
+                 this.$router.push("/LoginPage")
+             }
+             else if (name === this.$store.getters.getLoggedUser.name) {
+                 this.$router.push("/profile")
+                } else { alert("To nie jest twój profil") } 
+         }, */
         deleteStudent(studentId) {
             this.$store.dispatch("deleteStudent", studentId);
         },
@@ -184,12 +192,9 @@ export default {
             localStorage.setItem('studentSize', studentSize)
             localStorage.setItem('teacherPage', teacherPage)
             localStorage.setItem('teacherSize', teacherSize)
-            console.log(localStorage);
 
             this.$router.replace({ query: { studentPage, studentSize, teacherPage, teacherSize } });
-            console.log("studentParams");
         },
-
     },
     watch: {
         studentsDisplayed: 'listStudents',

@@ -58,7 +58,6 @@ export default {
   actions: {
     listStudents({ commit, getters }) {
       var params = getters.getStudentsParams;
-      console.log(params);
       if (getters.getStudentsDisplayed === "Wszystkich") {
         params.size = 1000;
       } else {

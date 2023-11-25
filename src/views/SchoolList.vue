@@ -48,7 +48,6 @@ export default {
             this.$store.commit("setSelectedSchool", schoolId);
         },
         deleteSchool(schoolId) {
-            console.log(schoolId);
             this.$store.dispatch("deleteSchool", schoolId);
         },
         clearEdit() {
@@ -60,11 +59,6 @@ export default {
             this.$store.dispatch("listStudents")
         this.$store.dispatch("listTeachers");
     },
-    //beforeCreate() {
-    //if (this.$store.state.isLogged === false) {
-    // this.$router.push("/");
-    //}
-    //},
 };
 </script>
 

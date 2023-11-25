@@ -4,10 +4,8 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import { loadFonts } from "./plugins/webfontloader";
-
 import bootstrap from "/src/bootstrap";
 
-//import bootstrap z takiej jak main stronki
 loadFonts();
 
 createApp(App).use(router).use(store).use(vuetify).mount("#app");

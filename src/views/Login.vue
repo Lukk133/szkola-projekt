@@ -1,8 +1,10 @@
 <template>
+    <h3 class="text-center" style="color: gray;">Aby założyć konto wybierz swoją szkołę z listy szkół i dodaj tam swoje
+        konto</h3>
     <div>
         <v-card class="mx-auto pa-12 pb-8 logo" elevation="8" max-width="448" rounded="lg">
-            <div class="text-subtitle-1 text-medium-emphasis">Wpisz login</div>
-            <v-text-field v-model="userLogin" density="compact" placeholder="Login" variant="outlined"></v-text-field>
+            <div class="text-subtitle-1 text-medium-emphasis">Wpisz swój email</div>
+            <v-text-field v-model="userEmail" density="compact" placeholder="Login" variant="outlined"></v-text-field>
 
             <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
                 Wpisz hasło
@@ -10,9 +12,6 @@
             <v-text-field v-model="userPassword" :append-inner-icon="visible ? 'fa-solid fa-eye mb-1' : 'fa-solid fa-eye-low-vision mb-1'
                 " :type="visible ? 'text' : 'password'" density="compact" placeholder="Hasło" variant="outlined"
                 @click:append-inner="visible = !visible"></v-text-field>
-            <div v-if="showAlert" class="ml-7" style="color: red">
-                Login i hasło musi mieć od 5 do 50 znaków
-            </div>
             <v-btn block class="mb-8" color="blue" size="large" variant="tonal" @click="login()">
                 Log In
             </v-btn>
@@ -24,7 +23,7 @@
 export default {
     data() {
         return {
-            userLogin: "",
+            userEmail: "",
             userPassword: "",
         };
     },
@@ -52,19 +51,19 @@ export default {
     methods: {
         login() {
             if (
-                this.userLogin.length <= 5 ||
+                this.userEmail.length <= 5 ||
                 this.userPassword.length <= 5 ||
-                this.userLogin.length >= 50 ||
+                this.userEmail.length >= 50 ||
                 this.userPassword.length >= 50
             ) {
                 this.$store.dispatch(
                     "showAlert",
                     "Hasło powinno mieć od 5 do 50 znaków"
                 );
-            } else {
-                this.$store.state.isLogged = true;
-                this.$store.commit("setLoggedUser", { name: this.userLogin, password: this.userPassword })
-                this.$router.push(`/`);
+            }
+            else {
+                this.$store.commit("setLoggedUser", { email: this.userEmail, password: this.userPassword })
+                this.$store.dispatch("loginUser", { router: this.$router, route: '/profile' })
             }
         },
     },

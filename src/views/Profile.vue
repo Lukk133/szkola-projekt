@@ -1,5 +1,5 @@
 <template>
-    <h1 class="text-center">Profil użytkownika {{ loggedUser.name }}</h1>
+    <h1 class="text-center">Profil użytkownika {{ loggedUser.email }}</h1>
     <h2 class="text-center">Twoje hasło</h2>
     <h3 class="text-center"> {{ loggedUser.password }}</h3>
 
@@ -15,8 +15,10 @@ export default {
     },
     methods: {
         logout() {
-            this.$router.push(`/${this.$store.getters.getSelectedSchool}`)
-            this.$store.state.isLogged == false
+            this.$router.push(`/`)
+            this.$store.commit("setIsLogged", false)
+            this.$store.commit("initLogout")
+            this.$store.dispatch("logoutUser")
         }
     }
 };

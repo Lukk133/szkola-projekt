@@ -21,12 +21,6 @@
 
 <script>
 export default {
-    data() {
-        return {
-            userEmail: "",
-            userPassword: "",
-        };
-    },
     computed: {
         visible: {
             get() {
@@ -46,7 +40,13 @@ export default {
         },
         showAlert() {
             return this.$store.getters.getShowAlert
-        }
+        },
+    },
+    data() {
+        return {
+            userEmail: "",
+            userPassword: "",
+        };
     },
     methods: {
         login() {

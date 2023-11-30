@@ -46,13 +46,17 @@ export default {
         },
         goToSchoolList() {
             this.$router.push("/")
+        },
+        getActualUser() {
+            if (!this.$store.getters.getActualUser.id) {
+                this.$store.dispatch("getActualUser")
+            }
         }
     },
+    created() {
+        this.getActualUser()
+    },
     name: 'App',
-
-    data: () => ({
-        //
-    }),
 }
 </script>
 

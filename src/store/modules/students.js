@@ -2,6 +2,11 @@ import axios from "axios";
 
 const STUDENT_URL = "students";
 
+const defaultStudentsPagination = {
+  page: 1,
+  size: 5,
+};
+
 export default {
   state: {
     students: [],
@@ -12,19 +17,14 @@ export default {
     params: {
       schoolId: 0,
     },
-    /*
-    studentPagination: 0,
-    totalStudents: 0,
-    studentsDisplayed: 5,
-    */
+    studentsPagination: { ...defaultStudentsPagination },
   },
   getters: {
     getStudent: (state) => state.student,
     getStudents: (state) => state.students,
     getStudentsParams: (state) => state.params,
-    getStudentsPagination: (state) => state.studentPagination,
+    getStudentsPagination: (state) => state.studentsPagination,
     getTotalStudents: (state) => state.totalStudents,
-    getStudentsDisplayed: (state) => state.studentsDisplayed,
   },
   mutations: {
     setStudent(state, data) {
@@ -36,14 +36,14 @@ export default {
     setTotalStudents(state, data) {
       state.totalStudents = data;
     },
-    setStudentsDisplayed(state, data) {
-      state.studentsDisplayed = data;
-    },
     initStudent(state) {
       state.student = {
         name: "",
         email: "",
       };
+    },
+    initStudentsPagination(state) {
+      state.studentsPagination = { ...defaultStudentsPagination };
     },
     setSelectedSchool(state, schoolId) {
       state.selectedSchoolId = schoolId;
@@ -51,26 +51,19 @@ export default {
     setStudentsParams(state, data) {
       state.params = data;
     },
-    setStudentPagination(state, data) {
-      state.studentPagination = data;
+    setStudentsPagination(state, data) {
+      state.studentsPagination = data;
     },
   },
   actions: {
     listStudents({ commit, getters }) {
+      console.log("listStudents nie dziąła");
       var params = getters.getStudentsParams;
-      if (getters.getStudentsDisplayed === "Wszystkich") {
-        params.size = 1000;
-      } else {
-        params.size = getters.getStudentsDisplayed;
-      }
-      params.page = getters.getStudentsPagination - 1;
-      let query = "";
-      for (let index in Object.keys(params)) {
-        let key = Object.keys(params)[index];
-        query += `${key}=${params[key]}&`;
-      }
+      let pagination = { ...getters.getStudentsPagination };
+      pagination.page = pagination.page - 1;
+      pagination.schoolId = params.schoolId;
       axios
-        .get(`${STUDENT_URL}?${query}`)
+        .get(`${STUDENT_URL}`, { params: pagination })
         .then((response) => {
           const listStudents = response.data.content.map((student) => {
             return {

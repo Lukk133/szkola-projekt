@@ -44,8 +44,8 @@ export default {
     },
     data() {
         return {
-            userEmail: "",
-            userPassword: "",
+            userEmail: "owosk@gmail.com",
+            userPassword: "password",
         };
     },
     methods: {
@@ -62,8 +62,7 @@ export default {
                 );
             }
             else {
-                this.$store.commit("setLoggedUser", { email: this.userEmail, password: this.userPassword })
-                this.$store.dispatch("loginUser", { router: this.$router, route: '/profile' })
+                this.$store.dispatch("login", { auth: { email: this.userEmail, password: this.userPassword } })
             }
         },
     },

@@ -20,15 +20,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(student, index) in students" :key="student.name">
-                                <td v-if="$store.getters.getStudentsDisplayed === 'Wszystkich'">
+                            <tr v-for="(student, index) in students" :key="student.id">
+                                <td>
                                     {{
-                                        index + 1
-                                    }}
-                                </td>
-                                <td v-if="$store.getters.getStudentsDisplayed != 'Wszystkich'">
-                                    {{
-                                        index + 1 + (studentsDisplayed * (studentPagination - 1))
+                                        index + 1 + (studentsPagination.page - 1) * (studentsPagination.size)
                                     }}
                                 </td>
                                 <td>
@@ -37,14 +32,17 @@
                                             student.name }}</div>
                                     </h3>
                                 </td>
-
-                                <v-icon @click="deleteStudent((studentId = student.id))" icon="fa fa-trash pl-5 mt-2" />
+                                <!-- TODO -->
+                                <!-- <DeleteDialog :label="`Studenta o id: ${student.id}`" @deleted="deleteStudent(student.id)" /> -->
+                                <v-icon @click="deleteStudent(student.id)" icon="fa fa-trash pl-5 mt-2" />
                             </tr>
                         </tbody>
                     </v-table>
-                    <v-pagination v-model="studentPagination" :length="studentPaginationNumber"></v-pagination>
-                    <v-select label="Ile uczniów chcesz wyświetlać na stronie" v-model="studentsDisplayed"
-                        :items="['5', '10', '20', 'Wszystkich']"></v-select>
+                    <v-pagination v-model="studentsPagination.page" :length="studentPaginationNumber"
+                        @update:model-value="listStudents"></v-pagination>
+                    <v-select label="Ile uczniów chcesz wyświetlać na stronie" v-model="studentsPagination.size"
+                        :items="perPageOptions" item-title="label" item-value="value"
+                        @update:model-value="changedStudentsPaginationSize"></v-select>
                 </v-sheet>
 
             </v-col>
@@ -75,14 +73,15 @@
                                         </div>
                                     </h3>
                                 </td>
-                                <v-icon @click="deleteTeacher((teacherId = teacher.id))" icon="fa fa-trash pl-5 mt-2" />
+                                <!-- <DeleteDialog :label="`Instruktora o id: ${instruktor.id}`" @deleted="deleteTeacher(id)" /> -->
+                                <v-icon @click="deleteTeacher(teacher.id)" icon="fa fa-trash pl-5 mt-2" />
                             </tr>
                         </tbody>
                     </v-table>
                     <v-pagination @click="listTeachers()" v-model="teacherPagination"
                         :length="teacherPaginationNumber"></v-pagination>
                     <v-select label="Ile instruktorów chcesz wyświetlać na stronie" v-model="teachersDisplayed"
-                        :items="['5', '10', '20', 'Wszystkich']"></v-select>
+                        :items="perPageOptions" item-title="label" item-value="value"></v-select>
                 </v-sheet>
             </v-col>
             <v-responsive width="100%"></v-responsive>
@@ -94,15 +93,40 @@
 import AddStudentDialog from "../assets/students/AddStudent.vue";
 import AddTeacherDialog from "../assets/teachers/AddTeacherDialog.vue";
 
-
-
 export default {
     components: {
         AddStudentDialog,
         AddTeacherDialog,
     },
+    data() {
+        return {
+            studentsPaginationData: 1,
+            teacherPagination: 1,
+            studentsDisplayed: 5,
+            teachersDisplayed: 5,
+            perPageOptions: [
+                {
+                    label: "5",
+                    value: 5
+                },
+                {
+                    label: "10",
+                    value: 10
+                },
+                {
+                    label: "20",
+                    value: 20
+                },
+                {
+                    label: "Wszyscy",
+                    value: 100
+                },
+            ]
+        };
+    },
     computed: {
         students() {
+            console.log("Computed students:", this.$store.getters.getStudents);
             return this.$store.getters.getStudents;
         },
         school() {
@@ -111,36 +135,24 @@ export default {
         teachers() {
             return this.$store.getters.getTeachers;
         },
+        studentsPagination() {
+            return this.$store.getters.getStudentsPagination
+        },
         studentPaginationNumber() {
             const totalStudents = this.$store.getters.getTotalStudents;
-            const studentsDisplayed = this.$store.getters.getStudentsDisplayed;
+            const studentsDisplayed = this.studentsPagination.size;
             return Math.ceil(totalStudents / studentsDisplayed);
         },
         teacherPaginationNumber() {
             const totalTeachers = this.$store.getters.getTotalTeachers;
             const teachersDisplayed = this.$store.getters.getTeachersDisplayed;
             return Math.ceil(totalTeachers / teachersDisplayed);
+        },
+        studentsOffset() {
+            return
         }
     },
-    data() {
-        return {
-            studentPagination: parseInt(localStorage.getItem("studentPage")) || 1,
-            teacherPagination: parseInt(localStorage.getItem("teacherPage")) || 1,
-            studentsDisplayed: parseInt(localStorage.getItem("studentSize")) || 5,
-            teachersDisplayed: parseInt(localStorage.getItem("teacherSize")) || 5,
-        };
-    },
     methods: {
-        /* goToProfile(name) {
-             console.log(name);
-             console.log(this.$store.getters.getLoggedUser.name);
-             if (this.$store.getters.getLoggedUser.name === "") {
-                 this.$router.push("/LoginPage")
-             }
-             else if (name === this.$store.getters.getLoggedUser.name) {
-                 this.$router.push("/profile")
-                } else { alert("To nie jest twój profil") } 
-         }, */
         deleteStudent(studentId) {
             this.$store.dispatch("deleteStudent", studentId);
         },
@@ -164,14 +176,17 @@ export default {
             this.$store.commit("setSchoolId", schoolId);
             this.$store.dispatch("findSchool", schoolId);
         },
+        changedStudentsPaginationSize() {
+            this.studentsPagination.page = 1
+            this.listStudents()
+        },
         listStudents() {
             var schoolId = this.$route.params.id;
-            var params = { schoolId: schoolId };
+            var params = { schoolId: schoolId }; //TODO ustawić raz (dodatkowa metoda setSchoolId) 
             this.$store.commit("setStudentsParams", params);
-            this.$store.commit("setStudentPagination", this.studentPagination);
-            this.$store.commit("setStudentsDisplayed", this.studentsDisplayed);
             this.$store.dispatch("listStudents");
             this.setUrlParams()
+
         },
         listTeachers() {
             const schoolId = this.$route.params.id;
@@ -183,8 +198,8 @@ export default {
             this.setUrlParams()
         },
         setUrlParams() {
-            const studentPage = this.$store.getters.getStudentsPagination;
-            const studentSize = this.$store.getters.getStudentsDisplayed;
+            const studentPage = this.studentsPagination.page;
+            const studentSize = this.studentsPagination.size;
             const teacherPage = this.$store.getters.getTeachersPagination;
             const teacherSize = this.$store.getters.getTeachersDisplayed;
 
@@ -195,14 +210,22 @@ export default {
 
             this.$router.replace({ query: { studentPage, studentSize, teacherPage, teacherSize } });
         },
+        getUrlParams() {
+            const params = this.$route.query
+            console.log(params);
+            const studentsParams = { page: params.studentPage, size: params.studentSize }
+            const instructorsParams = { page: params.teacherPage, size: params.teacherSize }
+            this.$store.commit("setTeachersPagination", instructorsParams);
+            this.$store.commit("setStudentsPagination", studentsParams);
+        }
     },
     watch: {
-        studentsDisplayed: 'listStudents',
-        studentPagination: 'listStudents',
         teachersDisplayed: 'listTeachers',
         teacherPagination: 'listTeachers',
     },
     created() {
+        this.setUrlParams()
+        this.getUrlParams();
         this.getSchool();
         this.listStudents();
         this.listTeachers();

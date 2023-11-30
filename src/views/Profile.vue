@@ -1,7 +1,7 @@
 <template>
-    <h1 class="text-center">Profil użytkownika {{ loggedUser.email }}</h1>
+    <h1 class="text-center">Profil użytkownika {{ actualUser.email }}</h1>
     <h2 class="text-center">Twoje hasło</h2>
-    <h3 class="text-center"> {{ loggedUser.password }}</h3>
+    <h3 class="text-center"> {{ actualUser }}</h3>
 
     <v-btn @click="logout">Wyloguj</v-btn>
 </template>
@@ -9,8 +9,8 @@
 <script>
 export default {
     computed: {
-        loggedUser() {
-            return this.$store.getters.getLoggedUser;
+        actualUser() {
+            return this.$store.getters.getActualUser;
         }
     },
     methods: {

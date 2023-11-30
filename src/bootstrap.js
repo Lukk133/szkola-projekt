@@ -9,4 +9,5 @@ axios.interceptors.request.use((config) => {
   return config;
 });
 
+//axios.defaults.baseURL = "http://localhost:8080/api/";
 axios.defaults.baseURL = "http://api.oskmanager.pl/api/";

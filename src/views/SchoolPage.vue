@@ -4,14 +4,16 @@
         {{ school.name }}
     </h1>
     <AddStudentDialog />
-
+    <DeleteStudent ref="deleteStudentDialog" />
+    <DeleteTeacher ref="deleteTeacherDialog" />
     <AddTeacherDialog />
 
     <v-container>
         <v-row no-gutters>
             <v-col>
                 <v-sheet class="pa-2 ma-2">
-
+                    <v-text-field v-model="searchStudent" @input="searchStudents"
+                        placeholder="Wyszukaj ucznia po imieniu"></v-text-field>
                     <v-table class="mx-4">
                         <thead>
                             <tr>
@@ -20,7 +22,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(student, index) in students" :key="student.id">
+                            <tr v-for="(student, index) in filteredStudents" :key="student.id">
                                 <td>
                                     {{
                                         index + 1 + (studentsPagination.page - 1) * (studentsPagination.size)
@@ -28,26 +30,26 @@
                                 </td>
                                 <td>
                                     <h3>
-                                        <div class="links text-left">{{
-                                            student.name }}</div>
+                                        <div class="links text-left">{{ student.name }}</div>
                                     </h3>
                                 </td>
-                                <!-- TODO -->
-                                <!-- <DeleteDialog :label="`Studenta o id: ${student.id}`" @deleted="deleteStudent(student.id)" /> -->
-                                <v-icon @click="deleteStudent(student.id)" icon="fa fa-trash pl-5 mt-2" />
+                                <v-icon @click="openDeleteStudentDialog(student.id)" icon="fa fa-trash pl-5 mt-2" />
                             </tr>
                         </tbody>
+
                     </v-table>
                     <v-pagination v-model="studentsPagination.page" :length="studentPaginationNumber"
                         @update:model-value="listStudents"></v-pagination>
                     <v-select label="Ile uczniów chcesz wyświetlać na stronie" v-model="studentsPagination.size"
-                        :items="perPageOptions" item-title="label" item-value="value"
+                        :items="dynamicPerPageStudents" item-title="label" item-value="value"
                         @update:model-value="changedStudentsPaginationSize"></v-select>
                 </v-sheet>
 
             </v-col>
             <v-col>
                 <v-sheet class=" pa-2 ma-2">
+                    <v-text-field v-model="searchTeacher" @input="searchTeachers"
+                        placeholder="Wyszukaj instruktora po imieniu"></v-text-field>
                     <v-table class="mx-4">
                         <thead>
                             <tr>
@@ -56,15 +58,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="( teacher, index ) in  teachers " :key="teacher.name">
-                                <td v-if="$store.getters.getTeachersDisplayed === 'Wszystkich'">
+                            <tr v-for="( teacher, index ) in  filteredTeachers " :key="teacher.id">
+                                <td>
                                     {{
-                                        index + 1
-                                    }}
-                                </td>
-                                <td v-if="$store.getters.getTeachersDisplayed != 'Wszystkich'">
-                                    {{
-                                        index + 1 + (teachersDisplayed * (teacherPagination - 1))
+                                        index + 1 + (teachersPagination.page - 1) * (teachersPagination.size)
                                     }}
                                 </td>
                                 <td>
@@ -73,15 +70,15 @@
                                         </div>
                                     </h3>
                                 </td>
-                                <!-- <DeleteDialog :label="`Instruktora o id: ${instruktor.id}`" @deleted="deleteTeacher(id)" /> -->
-                                <v-icon @click="deleteTeacher(teacher.id)" icon="fa fa-trash pl-5 mt-2" />
+                                <v-icon @click="openDeleteTeacherDialog(teacher.id)" icon="fa fa-trash pl-5 mt-2" />
                             </tr>
                         </tbody>
                     </v-table>
-                    <v-pagination @click="listTeachers()" v-model="teacherPagination"
+                    <v-pagination @update:model-value="listTeachers" v-model="teachersPagination.page"
                         :length="teacherPaginationNumber"></v-pagination>
-                    <v-select label="Ile instruktorów chcesz wyświetlać na stronie" v-model="teachersDisplayed"
-                        :items="perPageOptions" item-title="label" item-value="value"></v-select>
+                    <v-select label="Ile instruktorów chcesz wyświetlać na stronie" v-model="teachersPagination.size"
+                        :items="dynamicPerPageTeachers" item-title="label" item-value="value"
+                        @update:model-value="changedTeachersPaginationSize"></v-select>
                 </v-sheet>
             </v-col>
             <v-responsive width="100%"></v-responsive>
@@ -92,14 +89,20 @@
 <script>
 import AddStudentDialog from "../assets/students/AddStudent.vue";
 import AddTeacherDialog from "../assets/teachers/AddTeacherDialog.vue";
+import DeleteStudent from "../assets/students/DeleteStudent.vue";
+import DeleteTeacher from "../assets/teachers/DeleteTeacher.vue";
 
 export default {
     components: {
         AddStudentDialog,
         AddTeacherDialog,
+        DeleteStudent,
+        DeleteTeacher,
     },
     data() {
         return {
+            searchStudent: "",
+            searchTeacher: "",
             studentsPaginationData: 1,
             teacherPagination: 1,
             studentsDisplayed: 5,
@@ -125,8 +128,21 @@ export default {
         };
     },
     computed: {
+        dynamicPerPageStudents() {
+            return this.searchStudent ? [{ label: "Wszyscy", value: 100 }] : this.perPageOptions;
+        },
+        dynamicPerPageTeachers() {
+            return this.searchTeacher ? [{ label: "Wszyscy", value: 100 }] : this.perPageOptions;
+        },
+        filteredStudents() {
+            const searchStudent = this.searchStudent.toLowerCase();
+            return this.students.filter(student => student.name.toLowerCase().includes(searchStudent));
+        },
+        filteredTeachers() {
+            const searchTeacher = this.searchTeacher.toLowerCase();
+            return this.teachers.filter(teacher => teacher.name.toLowerCase().includes(searchTeacher));
+        },
         students() {
-            console.log("Computed students:", this.$store.getters.getStudents);
             return this.$store.getters.getStudents;
         },
         school() {
@@ -143,9 +159,12 @@ export default {
             const studentsDisplayed = this.studentsPagination.size;
             return Math.ceil(totalStudents / studentsDisplayed);
         },
+        teachersPagination() {
+            return this.$store.getters.getTeachersPagination
+        },
         teacherPaginationNumber() {
             const totalTeachers = this.$store.getters.getTotalTeachers;
-            const teachersDisplayed = this.$store.getters.getTeachersDisplayed;
+            const teachersDisplayed = this.teachersPagination.size
             return Math.ceil(totalTeachers / teachersDisplayed);
         },
         studentsOffset() {
@@ -153,23 +172,19 @@ export default {
         }
     },
     methods: {
-        deleteStudent(studentId) {
-            this.$store.dispatch("deleteStudent", studentId);
+        openDeleteStudentDialog(studentId) {
+            this.$store.commit("setStudentId", studentId)
+            this.$refs.deleteStudentDialog.open(studentId);
         },
-        clearEdit() {
-            this.studentName = "";
+        openDeleteTeacherDialog(teacherId) {
+            this.$store.commit("setTeacherId", teacherId)
+            this.$refs.deleteTeacherDialog.open(teacherId);//teacherId chyba nie potrzebne
         },
-        openTeacherEdit(index) {
-            this.$refs.editTeacherDialog[index].open();
+        searchStudents() {
+            this.listStudents(this.searchStudent)
         },
-        editTeacherName(index, name) {
-            this.$store.dispatch("editTeacherName", { index, name });
-        },
-        deleteTeacher(teacherId) {
-            this.$store.dispatch("deleteTeacher", teacherId);
-        },
-        clearEdit() {
-            this.teacherName = "";
+        searchTeachers() {
+            this.listTeachers(this.searchTeacher)
         },
         getSchool() {
             var schoolId = this.$route.params.id;
@@ -180,48 +195,52 @@ export default {
             this.studentsPagination.page = 1
             this.listStudents()
         },
-        listStudents() {
-            var schoolId = this.$route.params.id;
-            var params = { schoolId: schoolId }; //TODO ustawić raz (dodatkowa metoda setSchoolId) 
-            this.$store.commit("setStudentsParams", params);
-            this.$store.dispatch("listStudents");
-            this.setUrlParams()
+        changedTeachersPaginationSize() {
+            this.teachersPagination.page = 1
+            this.listTeachers()
+        },
+        setSchoolId() {
 
         },
-        listTeachers() {
-            const schoolId = this.$route.params.id;
-            let params = { schoolId: schoolId };
+        listStudents(searchStudent) {
+            var schoolId = this.$route.params.id;
+            var params = { schoolId: schoolId, search: searchStudent };
+            this.$store.commit("setStudentsParams", params);
+            this.$store.dispatch("listStudents", searchStudent);
+            this.setUrlParams(); //TODO ustawić raz (dodatkowa metoda setSchoolId) 
+        },
+        listTeachers(searchTeacher) {
+            var schoolId = this.$route.params.id;
+            var params = { schoolId: schoolId, search: searchTeacher };
             this.$store.commit("setTeachersParams", params);
-            this.$store.commit("setTeachersPagination", this.teacherPagination);
-            this.$store.commit("setTeachersDisplayed", this.teachersDisplayed);
-            this.$store.dispatch("listTeachers");
-            this.setUrlParams()
+            this.$store.dispatch("listTeachers", searchTeacher);
+            this.setUrlParams();
         },
         setUrlParams() {
+            const searchStudent = this.searchStudent;
+            const searchTeacher = this.searchTeacher;
+
             const studentPage = this.studentsPagination.page;
             const studentSize = this.studentsPagination.size;
-            const teacherPage = this.$store.getters.getTeachersPagination;
-            const teacherSize = this.$store.getters.getTeachersDisplayed;
+            const teacherPage = this.teachersPagination.page
+            const teacherSize = this.teachersPagination.size
 
-            localStorage.setItem('studentPage', studentPage)
-            localStorage.setItem('studentSize', studentSize)
-            localStorage.setItem('teacherPage', teacherPage)
-            localStorage.setItem('teacherSize', teacherSize)
+            localStorage.setItem('studentSize', studentSize);
+            localStorage.setItem('studentPage', studentPage);
+            localStorage.setItem('teacherPage', teacherPage);
+            localStorage.setItem('teacherSize', teacherSize);
 
-            this.$router.replace({ query: { studentPage, studentSize, teacherPage, teacherSize } });
+            this.$router.replace({ query: { studentPage, studentSize, teacherPage, teacherSize, searchStudent, searchTeacher } });
         },
+
+
         getUrlParams() {
             const params = this.$route.query
-            console.log(params);
             const studentsParams = { page: params.studentPage, size: params.studentSize }
             const instructorsParams = { page: params.teacherPage, size: params.teacherSize }
             this.$store.commit("setTeachersPagination", instructorsParams);
             this.$store.commit("setStudentsPagination", studentsParams);
         }
-    },
-    watch: {
-        teachersDisplayed: 'listTeachers',
-        teacherPagination: 'listTeachers',
     },
     created() {
         this.setUrlParams()
@@ -231,11 +250,6 @@ export default {
         this.listTeachers();
 
     },
-    /* beforeCreate() {
-        if ((this.$store.state.isLogged = false)) {
-          this.$router.push("/");
-        }
-      },*/
 };
 
 </script>

@@ -18,6 +18,7 @@ export default {
       schoolId: 0,
     },
     studentsPagination: { ...defaultStudentsPagination },
+    studentId: "",
   },
   getters: {
     getStudent: (state) => state.student,
@@ -25,6 +26,7 @@ export default {
     getStudentsParams: (state) => state.params,
     getStudentsPagination: (state) => state.studentsPagination,
     getTotalStudents: (state) => state.totalStudents,
+    getStudentId: (state) => state.studentId,
   },
   mutations: {
     setStudent(state, data) {
@@ -54,12 +56,14 @@ export default {
     setStudentsPagination(state, data) {
       state.studentsPagination = data;
     },
+    setStudentId(state, data) {
+      state.studentId = data;
+    },
   },
   actions: {
-    listStudents({ commit, getters }) {
-      console.log("listStudents nie dziąła");
+    listStudents({ commit, getters }, searchStudent) {
       var params = getters.getStudentsParams;
-      let pagination = { ...getters.getStudentsPagination };
+      let pagination = { ...getters.getStudentsPagination, searchStudent };
       pagination.page = pagination.page - 1;
       pagination.schoolId = params.schoolId;
       axios
@@ -72,6 +76,7 @@ export default {
               email: student.email,
             };
           });
+
           commit("setStudents", listStudents);
           commit("setTotalStudents", response.data.totalElements);
         })
@@ -112,6 +117,7 @@ export default {
       axios
         .delete(`${STUDENT_URL}/${studentId}`)
         .then((response) => {
+          console.log(response);
           dispatch("listStudents");
           dispatch("showAlert", "Usunięto pomyślnie");
         })

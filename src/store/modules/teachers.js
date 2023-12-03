@@ -2,6 +2,11 @@ import axios from "axios";
 
 const INSTRUCTOR_URL = "instructors";
 
+const defaultTeachersPagination = {
+  page: 1,
+  size: 5,
+};
+
 export default {
   state: {
     teachers: [],
@@ -12,6 +17,8 @@ export default {
     params: {
       schoolId: 0,
     },
+    teachersPagination: { ...defaultTeachersPagination },
+    teacherId: "",
     /*
     teacherPagination: 0,
     totalTeachers: 0,
@@ -22,10 +29,10 @@ export default {
     getTeacher: (state) => state.teacher,
     getTeachers: (state) => state.teachers,
     getTeachersParams: (state) => state.params,
-    getTeachersPagination: (state) => state.teacherPagination,
+    getTeachersPagination: (state) => state.teachersPagination,
     getTotalTeachers: (state) => state.totalTeachers,
-    getTeachersDisplayed: (state) => state.teachersDisplayed,
     getSelectedSchool: (state) => state.selectedSchoolId,
+    getTeacherId: (state) => state.teacherId,
   },
   mutations: {
     setTeacher(state, data) {
@@ -46,6 +53,9 @@ export default {
     setSelectedSchool(state, schoolId) {
       state.selectedSchoolId = schoolId;
     },
+    initTeachersPagination(state) {
+      state.teachersPagination = { ...defaultTeachersPagination };
+    },
     setTeachersParams(state, data) {
       state.params = data;
     },
@@ -55,23 +65,18 @@ export default {
     setTeachersDisplayed(state, data) {
       state.teachersDisplayed = data;
     },
+    setTeacherId(state, data) {
+      state.teacherId = data;
+    },
   },
   actions: {
-    listTeachers({ commit, getters }) {
+    listTeachers({ commit, getters }, searchTeacher) {
       var params = getters.getTeachersParams;
-      if (getters.getTeachersDisplayed === "Wszystkich") {
-        params.size = 1000;
-      } else {
-        params.size = getters.getTeachersDisplayed;
-      }
-      params.page = getters.getTeachersPagination - 1;
-      let query = "";
-      for (let index in Object.keys(params)) {
-        let key = Object.keys(params)[index];
-        query += `${key}=${params[key]}&`;
-      }
+      let pagination = { ...getters.getTeachersPagination, searchTeacher };
+      pagination.page = pagination.page - 1;
+      pagination.schoolId = params.schoolId;
       axios
-        .get(`${INSTRUCTOR_URL}?${query}`)
+        .get(`${INSTRUCTOR_URL}`, { params: pagination })
         .then((response) => {
           const listTeachers = response.data.content.map((teacher) => {
             return {
